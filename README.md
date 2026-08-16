@@ -313,5 +313,18 @@ feature, gallery and badge images are photographs of a Mexican cantina. Files
 were renamed to neutral names (`approach.jpg`, `badge-primary.png`) but the
 pictures themselves cannot be rebranded — replace them.
 
-`logo.svg` is a typographic placeholder generated for the rename; the original
-cantina wordmark is preserved beside it as `logo-previous.svg`.
+The brand mark is `logo.png` — the real AD monogram, white on transparent.
+The supplied artwork was white on opaque black with 68% of its canvas as
+padding, which at a 32px nav height would have drawn the mark itself at
+roughly 18px and shown a black rectangle on any non-black surface. It was
+cropped to the glyphs and keyed to transparency using luminance as the alpha
+channel, which preserves the antialiased edges that a colour-key threshold
+would have left with a dark fringe.
+
+Two earlier files sit unused beside it: `logo.svg`, the typographic
+placeholder generated for the rename, and `logo-previous.svg`, the original
+cantina wordmark.
+
+Note the monogram carries no company name, where the old wordmark spelled out
+"AD ASSOCIATES · STRATEGY & ADVISORY". The name reaches assistive technology
+and search engines through the `alt` text (`site.name`) instead.

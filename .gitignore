@@ -26,3 +26,7 @@ next-env.d.ts
 # To commit one anyway: git add -f "<filename>"
 /*.mov
 /*.mp4
+# Source artwork dropped in the root. The processed copy the site serves lives
+# under public/assets/images/; the original is not the deliverable.
+/*.png
+/*.jpg

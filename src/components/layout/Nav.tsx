@@ -17,8 +17,8 @@ export default function Nav({ nav, site, currentHref = nav.links[0]?.href }: Nav
   return (
     <nav className="ad-nav">
       <a className="ad-nav__brand" href={nav.links[0]?.href ?? "#"}>
-        {/* Intrinsic size stops the header re-flowing once the SVG lands. */}
-        <img src={site.logo} alt={site.name} width={350} height={100} />
+        {/* Intrinsic size stops the header re-flowing once the image lands. */}
+        <img src={site.logo} alt={site.name} width={390} height={256} />
       </a>
 
       <NavMenu links={nav.links} cta={nav.cta} currentHref={currentHref} />

@@ -25,9 +25,11 @@ export default function Footer({
         <div className="ad-footer__grid">
           <div>
             <img
+              className="ad-footer__logo"
               src={site.logo}
               alt={site.name}
-              style={{ height: "48px", marginBottom: "var(--ad-space-4)" }}
+              width={390}
+              height={256}
             />
             <p className="ad-muted" style={{ maxWidth: "38ch" }}>
               {footer.tagline}

@@ -41,7 +41,11 @@
 }
 
 .ad-nav__brand img {
-  height: clamp(24px, 6vw, 32px);
+  /* The mark is a compact 1.5:1 monogram, not the 3.5:1 wordmark this slot
+     was sized for — at the old 32px cap it occupied a third of the width and
+     read as an afterthought. The nav's 64px min-height leaves 48px of content
+     box, so 40px sits comfortably inside it. */
+  height: clamp(26px, 6.5vw, 40px);
   width: auto;
   max-width: 100%;
 }
@@ -742,6 +746,12 @@
   .ad-footer__grid { grid-template-columns: 2fr 1fr 1fr; }
 }
 
+.ad-footer__logo {
+  height: 56px;
+  width: auto;
+  margin-bottom: var(--ad-space-4);
+}
+
 .ad-footer__list {
   list-style: none;
   margin: 0;
@@ -788,5 +798,5 @@
      against the viewport and, offset 16px from the left, scroll the page
      sideways for as long as it held focus. */
   .ad-btn:not(.ad-skip-link) { width: 100%; }
-  .ad-nav__brand img { height: 22px; }
+  .ad-nav__brand img { height: 26px; }
 }
