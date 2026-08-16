@@ -13,7 +13,7 @@ file and every string comes from `src/data/content.json`.
 
 ```powershell
 npm install
-copy .env.example .env   # then edit the contact details
+# create .env — see Environment below
 npm run db:migrate       # create prisma/dev.db and apply migrations
 npm run db:seed          # 4 service lines, 16 offerings, 6 contact channels
 npm run dev              # http://localhost:3000
@@ -21,6 +21,52 @@ npm run dev              # http://localhost:3000
 
 Other scripts: `npm run build`, `npm start`, `npm run typecheck`,
 `npm run db:studio` (browse the data), `npm run db:reset` (drop and re-seed).
+
+### Environment
+
+`.env` is gitignored and there is no committed template, so it has to be
+written by hand. Everything the app reads is below; the contact values are
+what `npm run db:seed` writes into the `ContactChannel` table.
+
+```ini
+# SQLite for local development. For Postgres, change the datasource provider
+# in prisma/schema.prisma to "postgresql" and put the connection string here.
+DATABASE_URL="file:./prisma/dev.db"
+
+# Phone numbers must be E.164 (leading +, digits only) — the WhatsApp deep
+# link is built by stripping the +.
+CONTACT_PHONE_E164="+919566860808"
+CONTACT_PHONE_DISPLAY="+91 95668 60808"
+
+# Optional second line. Blank both for a single number; the seed then skips
+# that channel rather than writing an empty one.
+CONTACT_PHONE_ALT_E164="+919655566454"
+CONTACT_PHONE_ALT_DISPLAY="+91 96555 66454"
+
+# WhatsApp lines. With a second one set the site asks which to message.
+CONTACT_WHATSAPP_E164="+919566860808"
+CONTACT_WHATSAPP_ALT_E164="+919655566454"
+
+CONTACT_INSTAGRAM_HANDLE="ad_associates"   # no @
+CONTACT_EMAIL="adassociates6789@gmail.com"
+
+# Pre-typed into the WhatsApp chat and the mailto: subject. URL-encoded for
+# you; leave either blank to omit it.
+CONTACT_WHATSAPP_GREETING="Hello, I would like more information"
+CONTACT_EMAIL_SUBJECT="Enquiry for AD Associates"
+
+# Salt for hashing client IPs before they are stored on an enquiry. Generate:
+#   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+IP_HASH_SALT="change-me-in-production"
+
+# Enquiry rate limit: max submissions per IP per window (ms).
+ENQUIRY_RATE_LIMIT="5"
+ENQUIRY_RATE_WINDOW_MS="600000"
+```
+
+Only `DATABASE_URL` is required to boot. Every contact value has a fallback in
+`prisma/seed.ts`, but those fallbacks are the original US placeholders — leave
+one unset and the seed will quietly write a `+1 (555)` number into the API.
 
 **Must be on a local NTFS disk.** This project originated on a FAT32 USB drive
 where `npm install` stalled indefinitely — FAT32 cannot hold symlinks and USB
