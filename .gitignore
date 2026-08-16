@@ -19,10 +19,10 @@ next-env.d.ts
 # tracked, this one is personal.
 .claude/settings.local.json
 
-# Raw video exports left in the project root (~25MB, unreferenced). The hero
-# uses the encoded copy at public/assets/images/hero-video.mp4; these are the
-# masters it was cut from. Git history is permanent, so they are kept out of
-# it — store them wherever the rest of the source media lives. To commit one
-# anyway: git add -f "<filename>"
+# Video masters dropped in the project root. Only the copy the site actually
+# serves — public/assets/images/hero-video.mp4 — belongs in the repo; keeping
+# the master beside it would commit the same footage twice, and git history is
+# permanent. Store masters wherever the rest of the source media lives.
+# To commit one anyway: git add -f "<filename>"
 /*.mov
-/Website_Hero_Video_*.mp4
+/*.mp4
