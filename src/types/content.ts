@@ -56,7 +56,10 @@ export interface HeadingPart {
 export interface Hero {
   id: string;
   headingParts: HeadingPart[];
+  /** The same words as `headingParts`, unsplit — for reading, not rendering. */
   headingPlain: string;
+  /** Supporting line under the h1: what the firm actually supplies. */
+  subheading: string;
   video: string;
   poster: string;
   cta: Link;

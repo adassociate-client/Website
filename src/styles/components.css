@@ -688,6 +688,19 @@
   border-radius: var(--ad-radius);
 }
 
+.ad-hero__sub {
+  /* Larger than --ad-lead, which is body-copy scale and would read as a
+     caption under a 100px headline; still clearly subordinate to the h1. */
+  font-size: clamp(16px, 2.1vw, 26px);
+  line-height: var(--ad-leading-body);
+  color: var(--ad-neutral-100);
+  /* Roughly 50 characters — long enough to hold the line on a phone, short
+     enough that it does not run the full width of a desktop hero. */
+  max-width: 46ch;
+  margin-bottom: var(--ad-space-6);
+  text-wrap: pretty;
+}
+
 /* --- Footer -------------------------------------------------------------- */
 
 .ad-footer {

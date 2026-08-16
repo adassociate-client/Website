@@ -28,11 +28,12 @@
   "hero": {
     "id": "home",
     "headingParts": [
-      { "text": "Clear thinking", "accent": true },
-      { "text": " for the decisions that ", "accent": false },
-      { "text": "actually matter", "accent": true }
+      { "text": "AD Associates", "accent": true },
+      { "text": " — built for ", "accent": false },
+      { "text": "every site.", "accent": true }
     ],
-    "headingPlain": "Clear thinking for the decisions that actually matter",
+    "headingPlain": "AD Associates — built for every site.",
+    "subheading": "Portable toilets and security cabins that work as hard as you do",
     "video": "/assets/images/hero-video.mp4",
     "poster": "/assets/images/hero-poster.jpg",
     "cta": { "label": "Start a conversation", "href": "#contact" }
