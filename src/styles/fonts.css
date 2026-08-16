@@ -1,10 +1,20 @@
 /* ==========================================================================
    AD Associates — Typefaces
    Nunito (display / headings) + Libre Baskerville (body / captions).
-   Never introduce a third family.
    Files are bundled locally under public/assets/fonts — no network fetch.
    URLs are root-absolute (not relative as in the static kit) so Next's CSS
    loader passes them through to the public/ directory untouched.
+
+   The kit's rule was "never introduce a third family". The hero now breaks it
+   on request: --ad-font-hero in tokens.css asks for Baskerville Old Face.
+   There is deliberately no @font-face for it below — it is a proprietary
+   Monotype face licensed with Windows and Office, so serving the file from
+   this origin would redistribute it to every visitor. It is requested by name
+   from the visitor's own system instead, and falls back to the bundled Libre
+   Baskerville, which is itself a Baskerville revival.
+
+   To make it render for everyone, buy a webfont licence for the face and add
+   the @font-face here; nothing else needs to change.
    ========================================================================== */
 
 @font-face {

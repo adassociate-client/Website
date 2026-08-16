@@ -61,6 +61,17 @@
   --ad-font-display: "Nunito", system-ui, sans-serif;
   --ad-font-body:    "Libre Baskerville", Georgia, serif;
 
+  /* Hero only. Baskerville Old Face is a proprietary Monotype face that ships
+     with Windows and Office — it cannot be bundled and served like the other
+     two, so this is a system-font stack that degrades in order of closeness:
+       Baskerville Old Face  Windows / Office
+       Baskerville           macOS and iOS, the nearest true relative
+       Libre Baskerville     self-hosted, so this is the real floor — every
+                             visitor without one of the two above lands here
+       Georgia, serif        only if that bundled file fails to load
+     Most visitors (any Mac, any phone) will see Libre Baskerville. */
+  --ad-font-hero: "Baskerville Old Face", Baskerville, "Libre Baskerville", Georgia, serif;
+
   --ad-h1: 100px;
   --ad-h2: 90px;
   --ad-h3: 65px;
