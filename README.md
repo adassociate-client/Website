@@ -87,6 +87,40 @@ running process has already loaded the stale binary.
 surfaces as `Cannot find module './331.js'` on every route. Stop the dev
 server first; if it has already happened, delete `.next/` and restart.
 
+## Deploying
+
+The build runs without a `.env` and without a database, so a clean checkout
+deploys as-is on Vercel: import the repo, take the detected Next.js defaults,
+deploy. No environment variables are required to get the site up.
+
+That works because **nothing on the page calls the API**. Every section is
+server-rendered from `content.json`, so the whole public site — copy, imagery,
+phone and WhatsApp links, the map — is live with no database behind it.
+
+What is *not* live is `/api/*`. `/api/health` reports `degraded` with a 503 and
+the rest return errors, because the datasource is SQLite:
+
+- `prisma/dev.db` is gitignored, so it is not in the deployment at all.
+- A serverless filesystem is read-only apart from `/tmp`, and is discarded
+  between invocations, so an enquiry written there would not survive.
+
+Setting `DATABASE_URL` to the SQLite path on Vercel does not fix this; it needs
+a hosted database. Postgres is a two-line change — the `provider` in
+`schema.prisma` and the adapter in `db.ts` — plus `DATABASE_URL` and the
+`CONTACT_*` variables in the Vercel project, then `npm run db:migrate` and
+`npm run db:seed` against it. Until the contact form is actually wired to a
+page, none of that blocks the site.
+
+Two things had to change before any of this built at all, both worth keeping:
+
+- `prisma.config.ts` used `env("DATABASE_URL")`, which throws
+  `PrismaConfigEnvError` when unset and killed `prisma generate` — and so the
+  whole build — on every machine without a `.env`.
+- `db.ts` constructed the Prisma client at module load. `next build` imports
+  each route module to collect page data, so the build needed a live database
+  URL and failed with `Failed to collect page data for /api/products`. The
+  client is now built on first property access instead.
+
 ## Frontend
 
 ```
