@@ -1,0 +1,97 @@
+/* ==========================================================================
+   AD Associates — Motion
+   Expressive motion is part of the design language.
+   Keyframe names match the ones extracted from the live site.
+   ========================================================================== */
+
+@keyframes fadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* The site's primary scroll-reveal. */
+@keyframes jkit-fadeinup {
+  0%   { opacity: 0; transform: translate3d(0, 30px, 0); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes fadeInLeft {
+  0%   { opacity: 0; transform: translate3d(-30px, 0, 0); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes slide-from-left {
+  0%   { left: 0; }
+  100% { left: 101%; }
+}
+
+@keyframes slide-from-right {
+  0%   { left: 0; }
+  100% { left: -101%; }
+}
+
+@keyframes slide-from-left-reverse {
+  0%   { left: -101%; }
+  100% { left: 0; }
+}
+
+@keyframes slide-from-right-reverse {
+  0%   { left: 101%; }
+  100% { left: 0; }
+}
+
+@keyframes fa-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- Applied classes ----------------------------------------------------- */
+
+.animated { animation-fill-mode: both; }
+
+.fadeIn {
+  animation: fadeIn var(--ad-duration-fast) linear both;
+}
+
+.ad-reveal {
+  animation: jkit-fadeinup var(--ad-duration-enter) var(--ad-ease-out) both;
+}
+
+.ad-reveal--left {
+  animation: fadeInLeft var(--ad-duration-enter) var(--ad-ease-out) both;
+}
+
+/* Stagger children of a group. Delays stay on the 4px-thinking cadence. */
+.ad-stagger > *:nth-child(1) { animation-delay: 0ms;   }
+.ad-stagger > *:nth-child(2) { animation-delay: 100ms; }
+.ad-stagger > *:nth-child(3) { animation-delay: 200ms; }
+.ad-stagger > *:nth-child(4) { animation-delay: 300ms; }
+
+.ad-spin { animation: fa-spin 2s linear infinite; }
+
+/* Reveal-on-scroll: JS toggles .is-visible (see index.html). */
+.ad-observe {
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+  transition: opacity var(--ad-duration-enter) var(--ad-ease-out),
+              transform var(--ad-duration-enter) var(--ad-ease-out);
+}
+
+.ad-observe.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Reduced motion ------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .ad-observe { opacity: 1; transform: none; }
+}

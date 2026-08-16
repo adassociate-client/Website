@@ -1,0 +1,137 @@
+// AD Associates — data model
+//
+// Two domains, matching what the site actually does:
+//   1. Services  — the catalogue visitors browse, grouped into service lines
+//   2. Enquiries — messages sent from the contact form, plus the phone /
+//                  WhatsApp / Instagram channels the site points people to
+//
+// SQLite today, Postgres-ready. The only SQLite-specific compromises:
+//   - No native enums. Status/kind fields are String columns whose allowed
+//     values are enforced by Zod in src/server/validation.ts and listed in
+//     src/server/constants.ts. Switching to Postgres means turning those into
+//     real enums — a schema change, not an application change.
+//   - No scalar lists. `tags` is a comma-separated String, parsed into an
+//     array by the serializer so the API surface is already array-shaped.
+//
+// Prisma 7: the generated client is emitted into the source tree (not
+// node_modules), and the connection URL lives in prisma.config.ts rather than
+// here — the datasource block declares only the engine.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+/// A service line — Strategy, Operations, Transactions, Advisory Retainers.
+model Category {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  /// Display order in the catalogue; ties broken by name.
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products Product[]
+
+  @@index([isActive, sortOrder])
+}
+
+/// A single offering within a service line.
+model Product {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  description String
+
+  /// Minor units (cents). Never a float — money is not a Float.
+  priceCents Int
+  /// ISO 4217.
+  currency   String @default("USD")
+  /// What the price is per: "per engagement", "per day", "from". Optional
+  /// because some offerings are quoted rather than listed.
+  priceUnit  String?
+
+  imageUrl String?
+  /// Comma-separated; exposed as string[] by serializeProduct.
+  tags     String  @default("")
+
+  isAvailable Boolean @default(true)
+  isFeatured  Boolean @default(false)
+  sortOrder   Int     @default(0)
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  enquiries Enquiry[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId, sortOrder])
+  @@index([isAvailable])
+  @@index([isFeatured])
+}
+
+/// A message from a visitor. Optionally attached to the offering they were
+/// looking at, so the firm knows what the question is about.
+model Enquiry {
+  id String @id @default(cuid())
+
+  /// Human-quotable code, e.g. ADA-7F3K2Q. Unique so it can be looked up.
+  reference String @unique
+
+  name    String
+  email   String
+  phone   String?
+  message String
+
+  /// Which offering the visitor was viewing, if any. Kept on product delete.
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  /// How it arrived: form | whatsapp | phone | instagram. See CONTACT_KINDS.
+  source String @default("form")
+  /// Workflow state: new | read | replied | archived. See ENQUIRY_STATUSES.
+  status String @default("new")
+
+  /// Salted SHA-256 of the client IP — enough to rate limit and spot abuse,
+  /// without storing an identifier in the clear. Never returned by the API.
+  ipHash    String?
+  userAgent String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@index([productId])
+}
+
+/// A way to reach the firm. Seeded from env so the real phone number and
+/// social handles live in configuration, not in code.
+model ContactChannel {
+  id String @id @default(cuid())
+
+  /// phone | whatsapp | instagram | linkedin | email
+  kind  String
+  label String
+  /// Display form: "+15551234567", "@adassociates".
+  value String
+  /// Actionable link: tel:, https://wa.me/..., https://instagram.com/...
+  href  String
+
+  sortOrder Int     @default(0)
+  isActive  Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([kind, value])
+  @@index([isActive, sortOrder])
+}

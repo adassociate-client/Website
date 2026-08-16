@@ -1,0 +1,765 @@
+/* ==========================================================================
+   AD Associates — UI Components
+   Card · Button · Input · Badge · Modal · Table · Nav · Image box ·
+   Stat · Gallery · Footer
+   Every value traces back to palette.css or tokens.css. No magic numbers.
+   ========================================================================== */
+
+/* --- Navigation ---------------------------------------------------------- */
+
+.ad-nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--ad-z-header);
+  display: flex;
+  align-items: center;
+  gap: var(--ad-space-2);
+  min-height: var(--ad-nav-height);
+  padding: var(--ad-space-2) var(--ad-gutter);
+  /* Clears the notch when a phone is held in landscape. 0 elsewhere. */
+  padding-left: max(var(--ad-gutter), env(safe-area-inset-left));
+  padding-right: max(var(--ad-gutter), env(safe-area-inset-right));
+  background: var(--ad-background);
+  border-bottom: 1px solid var(--ad-border);
+}
+
+.ad-nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ad-space-2);
+  font-family: var(--ad-font-display);
+  font-weight: var(--ad-weight-heading);
+  color: var(--ad-text-primary);
+  /* The wordmark is 3.5:1, so at 32px tall it wants 112px — more than a third
+     of a 320px screen. Let it scale with the viewport and cap at the original
+     32px, keeping the aspect ratio so nothing distorts. */
+  flex: 0 1 auto;
+  min-width: 0;
+  /* The logo is a link home, and once the image shrinks on a small screen the
+     link shrinks with it — 22px tall, under the 24px WCAG 2.5.8 floor. */
+  min-height: var(--ad-touch-target);
+}
+
+.ad-nav__brand img {
+  height: clamp(24px, 6vw, 32px);
+  width: auto;
+  max-width: 100%;
+}
+
+/* Wrapper for the toggle + the list, so "click outside closes it" has a
+   single element to test against and the panel has a positioning context. */
+.ad-nav__menu {
+  display: contents;
+}
+
+/* --- The disclosure button (below 768px only) ---------------------------- */
+
+.ad-nav__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Icon-only controls are the easiest thing in a layout to under-size. */
+  width: var(--ad-touch-target);
+  height: var(--ad-touch-target);
+  margin-left: auto;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-radius);
+  color: var(--ad-text-primary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ad-nav__toggle-icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 20px;
+  height: 14px;
+}
+
+.ad-nav__toggle-icon > span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: currentColor;
+  border-radius: var(--ad-radius-xs);
+  transition: transform var(--ad-duration-micro) var(--ad-ease),
+              opacity var(--ad-duration-micro) var(--ad-ease);
+}
+
+/* Three bars fold into a cross. */
+.ad-nav__toggle-icon[data-open="true"] > span:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+.ad-nav__toggle-icon[data-open="true"] > span:nth-child(2) { opacity: 0; }
+.ad-nav__toggle-icon[data-open="true"] > span:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* --- The list: a dropdown panel on phones, an inline bar from 768px ------ */
+
+.ad-nav__links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 767px) {
+  .ad-nav__links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--ad-space-1);
+    padding: var(--ad-space-3) var(--ad-gutter) var(--ad-space-4);
+    background: var(--ad-background);
+    border-bottom: 1px solid var(--ad-border);
+    box-shadow: var(--ad-shadow-overlay);
+    /* A long menu on a short landscape phone must scroll, not overflow the
+       screen with its tail unreachable. */
+    max-height: calc(100dvh - var(--ad-nav-height));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .ad-nav__links[data-open="true"] { display: flex; }
+
+  .ad-nav__links .ad-nav__link {
+    display: flex;
+    align-items: center;
+    min-height: var(--ad-touch-target);
+    font-size: 16px;
+  }
+
+  .ad-nav__cta-item { margin-top: var(--ad-space-2); }
+  .ad-nav__cta      { width: 100%; }
+}
+
+@media (min-width: 768px) {
+  .ad-nav__menu {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ad-nav__toggle { display: none; }
+
+  .ad-nav__links {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: var(--ad-space-1);
+    /* Between the bar's links and its CTA — the CTA is the last item and is
+       pushed to the far right below. */
+    margin-left: var(--ad-space-4);
+  }
+
+  .ad-nav__cta-item { margin-left: auto; }
+}
+
+.ad-nav__link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--ad-text-muted);
+  font-family: var(--ad-font-display);
+  font-size: 14px;
+  /* 8px of vertical padding on a 14px line gave a ~30px tap target; the
+     min-height lifts it to the 44px both WCAG and the iOS HIG ask for. */
+  min-height: var(--ad-touch-target);
+  padding: var(--ad-space-2) var(--ad-space-3);
+  border-radius: var(--ad-radius);
+  transition: color var(--ad-duration-micro) var(--ad-ease);
+}
+
+.ad-nav__link[aria-current]  { color: var(--ad-accent); }
+
+@media (hover: hover) {
+  .ad-nav__link:hover { color: var(--ad-text-primary); }
+}
+
+/* --- Buttons ------------------------------------------------------------- */
+/* Hover/focus reproduce the extracted "float" interaction:
+   translateY(-8px) + accent fill at 87% alpha, 0.3s ease-out.              */
+
+.ad-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ad-space-2);
+  font-family: var(--ad-font-display);
+  font-size: 14px;
+  font-weight: var(--ad-weight-medium);
+  line-height: 1;
+  /* 12px padding on a 14px line came to ~38px tall. */
+  min-height: var(--ad-touch-target);
+  padding: var(--ad-space-3) var(--ad-space-6);
+  border-radius: var(--ad-radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  /* "Start a conversation" is wider than a 320px screen once padding is
+     added; let it wrap instead of forcing the page sideways. */
+  max-width: 100%;
+  overflow-wrap: break-word;
+  transition: transform var(--ad-duration-fast) var(--ad-ease-out),
+              background-color var(--ad-duration-fast) var(--ad-ease-out),
+              color var(--ad-duration-fast) var(--ad-ease-out);
+}
+
+/* Hover styling is gated on a device that can actually hover. A touch screen
+   reports :hover as *sticky after a tap* — so on a phone the old rule left
+   every tapped button lifted 8px out of place and filled with the hover
+   colour until something else was touched. Focus styling stays ungated: it
+   is how keyboard users see where they are. */
+@media (hover: hover) {
+  .ad-btn:hover { transform: translateY(var(--ad-lift)); }
+  .ad-btn--primary:hover { background: var(--ad-accent-87); color: var(--ad-text-primary); }
+  .ad-btn--ghost:hover,
+  .ad-btn--outline:hover {
+    background: var(--ad-accent-87);
+    border-color: var(--ad-accent);
+    color: var(--ad-text-primary);
+  }
+}
+
+.ad-btn:focus-visible { transform: translateY(var(--ad-lift)); }
+
+.ad-btn--primary {
+  background: var(--ad-accent);
+  color: var(--ad-text-primary);
+}
+.ad-btn--primary:focus-visible {
+  background: var(--ad-accent-87);
+  color: var(--ad-text-primary);
+}
+
+.ad-btn--ghost {
+  background: transparent;
+  border-color: var(--ad-border);
+  color: var(--ad-text-primary);
+}
+.ad-btn--ghost:focus-visible {
+  background: var(--ad-accent-87);
+  border-color: var(--ad-accent);
+  color: var(--ad-text-primary);
+}
+
+.ad-btn--outline {
+  background: transparent;
+  border-color: var(--ad-warning);
+  color: var(--ad-warning);
+}
+.ad-btn--outline:focus-visible {
+  background: var(--ad-accent-87);
+  border-color: var(--ad-accent);
+  color: var(--ad-text-primary);
+}
+
+.ad-btn[disabled],
+.ad-btn[aria-disabled="true"] {
+  background: var(--ad-surface);
+  color: var(--ad-neutral-500);
+  border-color: var(--ad-border);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* --- Card ---------------------------------------------------------------- */
+
+.ad-card {
+  background: var(--ad-surface);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-radius);
+  padding: var(--ad-space-4);
+  box-shadow: var(--ad-shadow-raised);
+}
+
+.ad-card__title {
+  font-size: 20px;
+  margin-bottom: var(--ad-space-2);
+}
+
+.ad-card__body { margin: 0; color: var(--ad-neutral-200); }
+
+/* --- Image box (the site's core content block) --------------------------- */
+
+.ad-image-box {
+  background: var(--ad-surface);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-radius);
+  overflow: hidden;
+  box-shadow: var(--ad-shadow-raised);
+  display: flex;
+  flex-direction: column;
+}
+
+.ad-image-box .image-box-header { overflow: hidden; }
+
+.ad-image-box .image-box-header img {
+  width: 100%;
+  /* Was a flat 260px: on a 320px phone the card is ~288px wide, so a 260px
+     image was nearly square, and in a 4-up desktop row the 270px-wide track
+     made it taller than it was wide. An aspect ratio holds the same crop at
+     every size. */
+  aspect-ratio: 3 / 2;
+  height: auto;
+  max-height: 320px;
+  object-fit: cover;
+  transition: transform var(--ad-duration-slow) var(--ad-ease-smooth);
+}
+
+@media (hover: hover) {
+  .ad-image-box:hover .image-box-header img { transform: scale(1.04); }
+}
+
+.ad-image-box .image-box-body { padding: var(--ad-space-6); }
+
+.ad-image-box .body-title {
+  font-size: clamp(18px, 2.2vw, 22px);
+  margin: 0 0 var(--ad-space-3);
+  color: var(--ad-text-primary);
+}
+
+.ad-image-box .body-description p {
+  margin: 0;
+  color: var(--ad-neutral-200);
+}
+
+/* --- Stat ---------------------------------------------------------------- */
+
+.ad-stat {
+  background: var(--ad-surface);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-radius);
+  padding: var(--ad-space-6);
+  text-align: center;
+}
+
+.ad-stat__value {
+  font-family: var(--ad-font-display);
+  font-size: var(--ad-stat);
+  font-weight: var(--ad-weight-heading);
+  line-height: var(--ad-leading-heading);
+  color: var(--ad-accent);
+}
+
+.ad-stat__label {
+  font-size: var(--ad-caption);
+  letter-spacing: var(--ad-tracking-caption);
+  text-transform: uppercase;
+  color: var(--ad-text-muted);
+  margin-top: var(--ad-space-2);
+}
+
+/* --- Badge / chip -------------------------------------------------------- */
+
+.ad-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--ad-space-1) var(--ad-space-2);
+  border-radius: var(--ad-radius-pill);
+  font-family: var(--ad-font-display);
+  font-size: var(--ad-caption);
+  font-weight: var(--ad-weight-medium);
+  background: var(--ad-surface);
+  color: var(--ad-text-muted);
+}
+
+.ad-badge--accent  { background: var(--ad-accent); color: var(--ad-text-primary); }
+.ad-badge--warning { background: var(--ad-warning); color: var(--ad-neutral-900); }
+.ad-badge--danger  { background: var(--ad-danger);  color: var(--ad-text-primary); }
+
+/* --- Input --------------------------------------------------------------- */
+
+.ad-field { display: block; margin-bottom: var(--ad-space-4); }
+
+.ad-label {
+  display: block;
+  font-size: var(--ad-caption);
+  letter-spacing: var(--ad-tracking-caption);
+  text-transform: uppercase;
+  color: var(--ad-text-muted);
+  margin-bottom: var(--ad-space-2);
+}
+
+.ad-input,
+.ad-textarea,
+.ad-select {
+  width: 100%;
+  background: var(--ad-background);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-radius);
+  padding: var(--ad-space-3);
+  color: var(--ad-text-primary);
+  font-family: var(--ad-font-body);
+  font-size: 14px;
+  transition: border-color var(--ad-duration-micro) var(--ad-ease);
+}
+
+.ad-input::placeholder,
+.ad-textarea::placeholder { color: var(--ad-neutral-500); }
+
+.ad-input:focus,
+.ad-textarea:focus,
+.ad-select:focus {
+  border-color: var(--ad-accent);
+  outline: none;
+}
+
+.ad-textarea { min-height: 120px; resize: vertical; }
+
+/* --- Table --------------------------------------------------------------- */
+/* Borders for separation — never zebra striping. */
+
+.ad-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--ad-font-body);
+}
+
+.ad-table th {
+  text-align: left;
+  padding: var(--ad-space-2) var(--ad-space-3);
+  font-family: var(--ad-font-display);
+  font-weight: var(--ad-weight-medium);
+  font-size: var(--ad-caption);
+  color: var(--ad-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--ad-tracking-caption);
+  border-bottom: 1px solid var(--ad-border);
+}
+
+.ad-table td {
+  padding: var(--ad-space-3);
+  border-bottom: 1px solid var(--ad-border);
+  color: var(--ad-neutral-200);
+}
+
+.ad-table__scroll { overflow-x: auto; }
+
+/* --- Modal --------------------------------------------------------------- */
+
+.ad-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--ad-z-modal);
+  background: var(--ad-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ad-space-4);
+}
+
+.ad-modal {
+  background: var(--ad-surface);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-radius-arch);
+  padding: var(--ad-space-6);
+  max-width: 480px;
+  width: 100%;
+}
+
+.ad-modal__actions {
+  display: flex;
+  gap: var(--ad-space-2);
+  margin-top: var(--ad-space-6);
+}
+
+/* --- Gallery ------------------------------------------------------------- */
+
+.ad-gallery {
+  display: grid;
+  gap: var(--ad-space-4);
+  /* Single column under 360px — a smartwatch two-up gives ~100px tiles, at
+     which point the photographs are unreadable. */
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 360px) {
+  .ad-gallery { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 768px) {
+  .ad-gallery { grid-template-columns: repeat(4, 1fr); }
+}
+
+.ad-gallery img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: var(--ad-radius);
+  border: 1px solid var(--ad-border);
+  transition: transform var(--ad-duration-fast) var(--ad-ease-out);
+}
+
+@media (hover: hover) {
+  .ad-gallery img:hover { transform: translateY(var(--ad-lift)); }
+}
+
+/* --- Media / hero -------------------------------------------------------- */
+
+.ad-hero {
+  position: relative;
+  /* Was a flat 560px. A phone in landscape is only ~375px tall, so the hero
+     alone was one and a half screens and the page looked empty on first
+     paint; a smartwatch was worse. Capping against the viewport keeps the
+     desktop rendering identical (88dvh of a 1080px screen exceeds 560px) and
+     makes the hero fit the screen everywhere else.
+     The vh line is the fallback for browsers without dvh; dvh is the one that
+     accounts for mobile browser chrome sliding in and out. */
+  min-height: min(560px, 88vh);
+  min-height: min(560px, 88dvh);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--ad-border);
+  background: var(--ad-background) var(--ad-hero-poster, none) center / cover no-repeat;
+}
+
+.ad-hero__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: var(--ad-z-base);
+}
+
+/* WCAG 2.2.2: motion that runs longer than five seconds needs a way out, and
+   this video loops forever with no controls. There is no CSS switch for
+   autoplay, so the video is dropped and the hero falls back to the poster
+   still it already carries — set as a custom property on the element because
+   the path lives in content.json, not here. */
+@media (prefers-reduced-motion: reduce) {
+  .ad-hero__media { display: none; }
+}
+
+/* Scrim, not blur — blur effects are an anti-pattern in this system. */
+.ad-hero__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--ad-scrim);
+  z-index: var(--ad-z-raised);
+}
+
+.ad-hero__content {
+  position: relative;
+  z-index: var(--ad-z-raised);
+  /* Capped against the viewport as well as the width, so a phone held
+     sideways does not spend two thirds of its 375px of height on padding. */
+  padding-block: min(var(--ad-space-25), 12dvh);
+}
+
+/* --- About ---------------------------------------------------------------- */
+
+.ad-about__badge {
+  /* A flat max-width of 280px is wider than a 240px watch screen, and the
+     badge was pushing the page sideways there. min() caps it at the column. */
+  max-width: min(280px, 100%);
+  margin-inline: auto;
+}
+
+/* --- Contact -------------------------------------------------------------- */
+
+.ad-contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ad-space-2);
+  margin-top: var(--ad-space-6);
+}
+
+/* Below 576px two buttons side by side leave ~140px each, so the labels wrap
+   to two lines and the row looks broken. One per line instead. */
+@media (max-width: 575px) {
+  .ad-contact__actions { flex-direction: column; align-items: stretch; }
+}
+
+/* --- WhatsApp number chooser --------------------------------------------- */
+
+.ad-whatsapp { position: relative; }
+
+/* A <summary> is a list-item by default and paints a disclosure triangle.
+   Both markers have to go for it to read as the button .ad-btn makes it. */
+.ad-whatsapp__summary {
+  list-style: none;
+  gap: var(--ad-space-2);
+}
+.ad-whatsapp__summary::-webkit-details-marker { display: none; }
+.ad-whatsapp__summary::marker { content: ""; }
+
+.ad-whatsapp__chevron {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid currentColor;
+  transition: transform var(--ad-duration-micro) var(--ad-ease);
+}
+
+.ad-whatsapp[open] .ad-whatsapp__chevron { transform: rotate(180deg); }
+
+.ad-whatsapp__panel {
+  background: var(--ad-surface);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-radius);
+  padding: var(--ad-space-3);
+  margin-top: var(--ad-space-2);
+}
+
+/* In flow on a phone, where the actions are already a full-width column and
+   an absolute panel could only overhang the screen edge. Floating from 576px,
+   where letting it push the row taller would shove the sibling buttons down
+   every time it opened. */
+@media (min-width: 576px) {
+  .ad-whatsapp__panel {
+    position: absolute;
+    top: calc(100% + var(--ad-space-2));
+    left: 0;
+    z-index: var(--ad-z-dropdown);
+    min-width: 240px;
+    max-width: min(300px, 80vw);
+    margin-top: 0;
+    box-shadow: var(--ad-shadow-overlay);
+  }
+}
+
+.ad-whatsapp__prompt {
+  margin: 0 0 var(--ad-space-2);
+  font-size: var(--ad-caption);
+  color: var(--ad-text-muted);
+}
+
+.ad-whatsapp__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ad-whatsapp__option {
+  display: flex;
+  align-items: center;
+  min-height: var(--ad-touch-target);
+  padding: var(--ad-space-2) var(--ad-space-3);
+  border-radius: var(--ad-radius-sm);
+  color: var(--ad-text-primary);
+  font-family: var(--ad-font-display);
+  white-space: nowrap;
+}
+
+@media (hover: hover) {
+  .ad-whatsapp__option:hover { background: var(--ad-accent-87); color: var(--ad-text-primary); }
+}
+
+/* A phone number split across a line break cannot be read back. It is short
+   enough that keeping it whole never overflows. */
+.ad-contact__phone { white-space: nowrap; }
+
+/* The secondary "compose in Gmail" link: readable, but clearly subordinate to
+   the address itself. */
+.ad-contact__alt {
+  font-size: var(--ad-caption);
+  color: var(--ad-text-muted);
+  white-space: nowrap;
+}
+
+@media (pointer: coarse) {
+  .ad-contact__alt {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--ad-touch-target);
+  }
+}
+
+.ad-contact__map {
+  display: block;
+  width: 100%;
+  /* Was a flat 360px. Proportional to its column instead, with a floor that
+     keeps the map usable and a ceiling so it cannot dominate a tall screen. */
+  height: clamp(220px, 45vw, 360px);
+  border: 1px solid var(--ad-border);
+  border-radius: var(--ad-radius);
+}
+
+/* --- Footer -------------------------------------------------------------- */
+
+.ad-footer {
+  /* The bottom inset clears the iPhone home indicator, which otherwise sits
+     over the copyright line. 0 on every other device. */
+  padding: var(--ad-space-16) 0 calc(var(--ad-space-4) + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--ad-border);
+  background: var(--ad-background);
+}
+
+.ad-footer__grid {
+  display: grid;
+  gap: var(--ad-space-8);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  /* The office column carries the email address, which at caption size needs
+     ~160px and has nowhere to break. Under the old 2fr 1fr 1fr it got exactly
+     164px at 768px wide and wrapped mid-domain. */
+  .ad-footer__grid { grid-template-columns: 1.5fr 1.25fr 1fr; }
+}
+
+@media (min-width: 992px) {
+  .ad-footer__grid { grid-template-columns: 2fr 1fr 1fr; }
+}
+
+.ad-footer__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ad-footer__list li + li { margin-top: var(--ad-space-2); }
+
+.ad-footer__bottom {
+  margin-top: var(--ad-space-12);
+  padding-top: var(--ad-space-4);
+  border-top: 1px solid var(--ad-border);
+  font-size: var(--ad-caption);
+  color: var(--ad-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ad-space-2);
+  justify-content: space-between;
+}
+
+/* Footer links are set at caption size and stacked tightly; on a touch screen
+   that is a column of 15px-tall targets a finger cannot separate. */
+@media (pointer: coarse) {
+  .ad-footer__list a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--ad-touch-target);
+  }
+}
+
+/* --- Smartwatch and very small phones (≤360px) ----------------------------
+   The clamps above already carry the type and rhythm down this far; what is
+   left is the handful of places where a fixed component measurement is still
+   too wide for the screen.
+   ------------------------------------------------------------------------ */
+
+@media (max-width: 360px) {
+  .ad-image-box .image-box-body { padding: var(--ad-space-4); }
+  .ad-stat  { padding: var(--ad-space-4); }
+  .ad-card  { padding: var(--ad-space-3); }
+
+  /* Side-by-side buttons have nowhere to go at this width. The skip link is
+     exempt: it is absolutely positioned, so a 100% width would resolve
+     against the viewport and, offset 16px from the left, scroll the page
+     sideways for as long as it held focus. */
+  .ad-btn:not(.ad-skip-link) { width: 100%; }
+  .ad-nav__brand img { height: 22px; }
+}

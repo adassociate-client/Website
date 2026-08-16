@@ -1,0 +1,14 @@
+/* ==========================================================================
+   Global stylesheet — cascade order matters, do not reorder.
+   fonts → palette (colour source of truth) → tokens (spacing/type/motion)
+   → base (reset + primitives) → components → animations.
+   These files are copied verbatim from the design kit's assets/ folder,
+   except fonts.css, whose @font-face URLs were made root-absolute.
+   ========================================================================== */
+
+@import "../styles/fonts.css";
+@import "../styles/palette.css";
+@import "../styles/tokens.css";
+@import "../styles/base.css";
+@import "../styles/components.css";
+@import "../styles/animations.css";

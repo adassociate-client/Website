@@ -1,0 +1,154 @@
+{
+  "_comment": "Every string and media path on the page. PLACEHOLDER FACTS: the founding year, engagement count, office address, phone number and map location are invented stand-ins carried over from the previous build's layout — replace them with AD Associates' real details before going live.",
+
+  "site": {
+    "name": "AD Associates",
+    "title": "AD Associates — Strategy & Advisory",
+    "description": "AD Associates is an advisory firm working with leadership teams on strategy, operations and transactions. Small teams, senior people, direct answers.",
+    "tagline": "Advisory that holds up under pressure",
+    "url": "https://adassociates.com",
+    "language": "en",
+    "founded": 2014,
+    "logo": "/assets/images/logo.svg",
+    "favicon": "/assets/images/favicon.svg"
+  },
+
+  "nav": {
+    "skipLink": "Skip to content",
+    "links": [
+      { "label": "Home", "href": "#home" },
+      { "label": "About", "href": "#about" },
+      { "label": "Approach", "href": "#approach" },
+      { "label": "Work", "href": "#work" },
+      { "label": "Contact", "href": "#contact" }
+    ],
+    "cta": { "label": "Start a conversation", "href": "#contact" }
+  },
+
+  "hero": {
+    "id": "home",
+    "headingParts": [
+      { "text": "Clear thinking", "accent": true },
+      { "text": " for the decisions that ", "accent": false },
+      { "text": "actually matter", "accent": true }
+    ],
+    "headingPlain": "Clear thinking for the decisions that actually matter",
+    "video": "/assets/images/hero-video.mp4",
+    "poster": "/assets/images/approach.jpg",
+    "cta": { "label": "Start a conversation", "href": "#contact" }
+  },
+
+  "about": {
+    "id": "about",
+    "eyebrow": "About",
+    "heading": "An advisory firm built around senior attention",
+    "body": "AD Associates works with leadership teams facing decisions that do not have a clean answer. We are deliberately small, so the people you meet are the people who do the work. Every engagement is scoped to a question worth answering, and we would rather tell you the work is unnecessary than sell you a longer one.",
+    "emphasis": [
+      "AD Associates",
+      "the people you meet are the people who do the work",
+      "a question worth answering"
+    ],
+    "cta": { "label": "Start a conversation", "href": "#contact" },
+    "stat": { "value": "250+", "label": "Engagements Delivered" },
+    "badge": { "src": "/assets/images/badge-primary.png", "alt": "" }
+  },
+
+  "capabilities": [
+    {
+      "title": "Strategy and growth",
+      "description": "Where to compete and what to stop doing. Market and competitor analysis, portfolio decisions, pricing, and growth plans that survive contact with a budget.",
+      "image": "/assets/images/feature-1.png",
+      "alt": "A strategy working session"
+    },
+    {
+      "title": "Operations and performance",
+      "description": "Turning intent into throughput. Process and cost diagnostics, operating model design, and the unglamorous follow-through that makes a change stick past the first quarter.",
+      "image": "/assets/images/feature-2.png",
+      "alt": "An operations review in progress"
+    },
+    {
+      "title": "Transaction support",
+      "description": "Commercial and operational due diligence, valuation support, and post-deal integration planning — so the thesis you underwrote is the one you end up owning.",
+      "image": "/assets/images/feature-3.png",
+      "alt": "A transaction advisory discussion"
+    }
+  ],
+
+  "approach": {
+    "id": "approach",
+    "eyebrow": "Approach",
+    "heading": "Small teams, senior people, direct answers",
+    "body": "We staff engagements thin and senior. You get a partner in the room rather than a pyramid of analysts, and findings as they emerge rather than a reveal in week eight. When the evidence contradicts the brief, we say so.",
+    "image": "/assets/images/approach.jpg",
+    "alt": "The AD Associates team at work",
+    "cta": { "label": "Start a conversation", "href": "#contact" }
+  },
+
+  "work": {
+    "id": "work",
+    "eyebrow": "Work",
+    "heading": "Selected engagements",
+    "images": [
+      { "src": "/assets/images/gallery-1.png", "alt": "Engagement highlight, 1 of 4" },
+      { "src": "/assets/images/gallery-2.png", "alt": "Engagement highlight, 2 of 4" },
+      { "src": "/assets/images/gallery-3.png", "alt": "Engagement highlight, 3 of 4" },
+      { "src": "/assets/images/gallery-4.png", "alt": "Engagement highlight, 4 of 4" }
+    ]
+  },
+
+  "contact": {
+    "id": "contact",
+    "eyebrow": "Contact",
+    "heading": "Start a conversation",
+    "address": "2/45-C, Mariamman Kovil Street, Vellanaipatti, Serayampalayam, Coimbatore, Tamil Nadu 641048.",
+    "addressLabel": "Office",
+    "phoneLabel": "Telephone",
+    "phones": [
+      { "display": "+91 95668 60808", "href": "tel:+919566860808" },
+      { "display": "+91 96555 66454", "href": "tel:+919655566454" }
+    ],
+    "email": "adassociates6789@gmail.com",
+    "emailLabel": "Email",
+    "emailHref": "mailto:adassociates6789@gmail.com?subject=Enquiry%20for%20AD%20Associates",
+    "whatsapp": {
+      "label": "Message on WhatsApp",
+      "prompt": "Which number would you like to message?",
+      "numbers": [
+        {
+          "display": "+91 95668 60808",
+          "href": "https://wa.me/919566860808?text=Hello%2C%20I%20would%20like%20more%20information."
+        },
+        {
+          "display": "+91 96555 66454",
+          "href": "https://wa.me/919655566454?text=Hello%2C%20I%20would%20like%20more%20information."
+        }
+      ]
+    },
+    "emailWebLabel": "compose in Gmail",
+    "emailWebHref": "https://mail.google.com/mail/?view=cm&fs=1&to=adassociates6789@gmail.com&su=Enquiry%20for%20AD%20Associates",
+    "mapEmbed": "https://maps.google.com/maps?cid=18258534699908848486&output=embed",
+    "mapTitle": "AD Associates office location"
+  },
+
+  "social": [
+    { "label": "Instagram", "href": "https://www.instagram.com/ad_associates/" }
+  ],
+
+  "footer": {
+    "tagline": "Advisory that holds up under pressure",
+    "visitLabel": "Office",
+    "followLabel": "Follow",
+    "addressLines": [
+      "2/45-C, Mariamman Kovil Street",
+      "Vellanaipatti, Serayampalayam",
+      "Coimbatore, Tamil Nadu 641048"
+    ],
+    "credit": "adassociates.com",
+    "copyright": "Copyright © 2026 AD Associates. All rights reserved."
+  },
+
+  "buttons": {
+    "primary": "Start a conversation",
+    "contact": "Contact"
+  }
+}

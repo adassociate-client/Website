@@ -1,0 +1,47 @@
+/* ==========================================================================
+   AD Associates — Colour Palette
+   Every hex in this project must come from this file. No invented colours.
+   ========================================================================== */
+
+:root {
+  /* --- Core roles ------------------------------------------------------- */
+  --ad-background:    #000000; /* page / app background, darkest surface     */
+  --ad-surface:       #333333; /* cards, panels, modals                      */
+  --ad-text-primary:  #ffffff; /* headings, body text                        */
+  --ad-text-muted:    #009e95; /* captions, labels, placeholders (teal)      */
+  --ad-text-dim:      #444444; /* secondary muted text on light surfaces     */
+  --ad-accent:        #92843b; /* CTAs, links, focus rings, active states    */
+  --ad-border:        #181d23; /* dividers, card borders, outlines           */
+
+  /* --- Status ----------------------------------------------------------- */
+  --ad-warning:       #f5eedc; /* caution states, pending items (cream)      */
+  --ad-danger:        #d9534f; /* errors, destructive actions                */
+  --ad-info:          #0058e6; /* informational highlights                   */
+  --ad-amber:         #ffc402; /* secondary accent, highlights               */
+
+  /* --- Extended neutrals ------------------------------------------------ */
+  --ad-neutral-100:   #eeeeee;
+  --ad-neutral-200:   #cccccc;
+  --ad-neutral-300:   #999999;
+  --ad-neutral-400:   #7f8995;
+  --ad-neutral-500:   #707070;
+  --ad-neutral-900:   #19190e; /* deep background layer / shadow colour      */
+  --ad-slate:         #2c324c;
+  --ad-form-border:   #d5d5d7;
+
+  /* --- Derived (alpha variants of the above, no new hues) --------------- */
+  --ad-accent-87:     rgba(146, 132, 59, 0.87); /* extracted hover fill      */
+  --ad-overlay:       rgba(0, 0, 0, 0.6);       /* modal backdrop            */
+  --ad-scrim:         rgba(0, 0, 0, 0.55);      /* media/video scrim         */
+
+  /* --- Upstream Elementor aliases (kept for parity with the live site) --- */
+  --e-global-color-primary:   #f5eedc;
+  --e-global-color-secondary: #009e95;
+  --e-global-color-accent:    #92843b;
+  --e-global-color-text:      #000000;
+  --jkit-txt-h-color:         #181d23;
+  --jkit-txt-m-color:         #999999;
+  --jkit-txt-a-color:         #0058e6;
+  --jkit-bg-color:            #ffffff;
+  --jkit-form-border-color:   #d5d5d7;
+}

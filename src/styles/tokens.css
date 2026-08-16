@@ -1,0 +1,127 @@
+/* ==========================================================================
+   AD Associates — Design Tokens
+   Spacing, radius, type scale, elevation, z-index, motion.
+   Colour tokens live in ../colors/palette.css.
+   ========================================================================== */
+
+:root {
+  /* --- Spacing ----------------------------------------------------------
+     1–8 stay on the fixed 4px grid: these are *component* measurements
+     (gaps, padding inside a card) and a card should not breathe differently
+     because the window is wide.
+
+     12 and up are *page rhythm* — the gaps between major sections. Those are
+     fluid, because 120px of dead air between sections is proportionate at
+     1440px and absurd at 320px, where it pushes every section a full screen
+     apart. Each keeps its original value as the clamp maximum, so the desktop
+     rendering is unchanged from the extracted design.
+     --------------------------------------------------------------------- */
+  --ad-space-1:  4px;   /* tight: icon + label, avatar + name               */
+  --ad-space-2:  8px;   /* between sibling items                            */
+  --ad-space-3:  12px;  /* medium: within a group                           */
+  --ad-space-4:  16px;  /* medium: between groups                           */
+  --ad-space-5:  20px;
+  --ad-space-6:  24px;  /* wide: between distinct sections                   */
+  --ad-space-8:  32px;  /* wide                                             */
+  --ad-space-12: clamp(32px,  6vw,  48px); /* vast: major page section breaks */
+  --ad-space-16: clamp(40px,  7vw,  64px);
+  --ad-space-20: clamp(48px,  8vw,  80px); /* section padding-top            */
+  --ad-space-25: clamp(56px, 10vw, 100px); /* hero section padding           */
+  --ad-space-30: clamp(64px, 12vw, 120px); /* tallest section padding        */
+
+  /* --- Layout ----------------------------------------------------------- */
+  --ad-container:      1180px; /* live DOM container max-width              */
+  --ad-container-narrow: 1140px;
+  /* 24px of gutter each side costs 15% of a 320px screen. Scale it down. */
+  --ad-gutter:         clamp(16px, 4vw, 24px);
+  /* Height of the sticky header. Drives scroll-padding so anchored sections
+     do not land underneath it, and the top of the mobile menu panel. */
+  --ad-nav-height:     64px;
+  /* Minimum hit area for anything tappable (WCAG 2.5.5 / iOS HIG). */
+  --ad-touch-target:   44px;
+
+  /* --- Radius ----------------------------------------------------------- */
+  --ad-radius-xs:   2px;
+  --ad-radius-sm:   4px;
+  --ad-radius-md:   8px;
+  --ad-radius:      10px;  /* default                                       */
+  --ad-radius-lg:   15px;
+  --ad-radius-xl:   20px;
+  --ad-radius-pill: 9999px;
+  /* The signature corners are fluid too: a fixed 100px arch on a 288px-wide
+     phone image eats a third of the picture. */
+  --ad-radius-arch: clamp(32px,  9vw, 100px) 0px;      /* asymmetric corner  */
+  --ad-radius-dome: 0px 0px clamp(48px, 13vw, 150px);  /* bottom sweep       */
+
+  /* --- Type scale -------------------------------------------------------
+     h1–h4 and the stat figure are fluid; each clamp maximum is the original
+     fixed value, so nothing changes at desktop width. The lower bounds are
+     set for a ~240px smartwatch viewport, not a phone.
+     --------------------------------------------------------------------- */
+  --ad-font-display: "Nunito", system-ui, sans-serif;
+  --ad-font-body:    "Libre Baskerville", Georgia, serif;
+
+  --ad-h1: 100px;
+  --ad-h2: 90px;
+  --ad-h3: 65px;
+  --ad-h4: clamp(22px, 3.2vw, 32px);
+  --ad-stat: clamp(34px, 7vw, 56px); /* the big accent figure in .ad-stat    */
+  --ad-lead: clamp(16px, 1.4vw, 18px);
+  --ad-body: 15px;
+  --ad-caption: 12px;
+
+  --ad-leading-heading: 1.2;
+  --ad-leading-body:    1.5;
+  --ad-weight-heading:  700;
+  --ad-weight-medium:   600;
+  --ad-weight-body:     400;
+  --ad-tracking-caption: 0.05em;
+
+  /* --- Elevation -------------------------------------------------------- */
+  --ad-shadow-flat:     inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  --ad-shadow-raised:   0 2px 4px rgba(0, 0, 0, 0.08);
+  --ad-shadow-floating: inset 0 0 20px 20px rgba(255, 255, 255, 0.25);
+  --ad-shadow-overlay:  0 10px 30px 0 rgba(45, 45, 45, 0.2);
+
+  /* --- Z-index ---------------------------------------------------------- */
+  --ad-z-base:     0;
+  --ad-z-raised:   1;
+  --ad-z-sticky:   10;
+  --ad-z-header:   100;
+  --ad-z-dropdown: 999;
+  --ad-z-modal:    1000;
+  --ad-z-toast:    10000;
+
+  /* --- Motion ----------------------------------------------------------- */
+  --ad-duration-micro: 150ms;
+  --ad-duration-fast:  300ms;  /* the site's canonical duration             */
+  --ad-duration-slow:  500ms;
+  --ad-duration-enter: 600ms;
+  --ad-ease:        ease-in-out;         /* default                         */
+  --ad-ease-out:    ease-out;            /* enters                          */
+  --ad-ease-in:     ease-in;             /* exits                           */
+  --ad-ease-smooth: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ad-lift:        -8px;                /* extracted button hover travel   */
+}
+
+/* --- Breakpoints (media queries are min-width unless noted) --------------
+   Most of the scaling is done by the clamp()s above, which cover every width
+   continuously. These breakpoints are only for changes a clamp cannot make:
+   column counts, and the nav switching between a bar and a panel.
+
+   360px  xxs   smartwatch / very small phone — below this, tighten only
+   576px  sm    large phone, small phone landscape
+   768px  md    tablet portrait (iPad 768, iPad Air 820) — nav becomes a bar
+   992px  lg    tablet landscape, small laptop
+   1200px xl    desktop
+   ----------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ad-duration-micro: 0s;
+    --ad-duration-fast:  0s;
+    --ad-duration-slow:  0s;
+    --ad-duration-enter: 0s;
+    --ad-lift: 0px;
+  }
+}

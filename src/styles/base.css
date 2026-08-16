@@ -1,0 +1,171 @@
+/* ==========================================================================
+   AD Associates — Base: reset, typography, layout primitives
+   Depends on: ../colors/palette.css, tokens.css, ../fonts/fonts.css
+   ========================================================================== */
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* The header is sticky, so an anchored section would otherwise scroll to
+     sit *underneath* it — tapping "About" landed with the heading hidden.
+     scroll-padding offsets every anchor jump by the header's height. */
+  scroll-padding-top: calc(var(--ad-nav-height) + var(--ad-space-4));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+body {
+  margin: 0;
+  background: var(--ad-background);
+  color: var(--ad-text-primary);
+  font-family: var(--ad-font-body);
+  font-size: var(--ad-body);
+  font-weight: var(--ad-weight-body);
+  line-height: var(--ad-leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+video { max-width: 100%; display: block; }
+
+/* --- Headings — Nunito, tight leading, bold ------------------------------ */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--ad-font-display);
+  font-weight: var(--ad-weight-heading);
+  line-height: var(--ad-leading-heading);
+  color: var(--ad-text-primary);
+  margin: 0 0 var(--ad-space-4);
+  /* A heading at 8vw can hold a word wider than a 320px screen; without this
+     it pushes the whole page sideways rather than breaking. */
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+/* Lower bounds target a ~240px smartwatch, not a phone: the old 40px floor
+   meant h1 stopped shrinking below 500px and overflowed narrow screens. */
+h1 { font-size: clamp(30px, 8vw,   var(--ad-h1)); }
+h2 { font-size: clamp(26px, 6.5vw, var(--ad-h2)); }
+h3 { font-size: clamp(21px, 4.5vw, var(--ad-h3)); }
+h4 { font-size: var(--ad-h4); }
+
+p { margin: 0 0 var(--ad-space-4); }
+
+strong { font-weight: 700; color: var(--ad-text-primary); }
+
+a {
+  color: var(--ad-accent);
+  text-decoration: none;
+  transition: color var(--ad-duration-micro) var(--ad-ease);
+}
+a:hover { color: var(--ad-warning); }
+
+:focus-visible {
+  outline: 3px solid var(--ad-accent);
+  outline-offset: 2px;
+}
+
+/* --- Layout primitives --------------------------------------------------- */
+
+.ad-container {
+  width: 100%;
+  max-width: var(--ad-container);
+  margin-inline: auto;
+  /* env() keeps text clear of the rounded corners and camera cutout when a
+     notched phone is held in landscape. Resolves to 0 everywhere else. */
+  padding-inline:
+    max(var(--ad-gutter), env(safe-area-inset-left))
+    max(var(--ad-gutter), env(safe-area-inset-right));
+}
+
+.ad-section       { padding: var(--ad-space-20) 0 0; }
+.ad-section--hero { padding: var(--ad-space-25) 0 var(--ad-space-12); }
+.ad-section--tall { padding: var(--ad-space-30) 0 var(--ad-space-25); }
+.ad-section--flush{ padding: var(--ad-space-12) 0; }
+
+.ad-stack > * + * { margin-top: var(--ad-space-4); }
+
+.ad-grid {
+  display: grid;
+  gap: var(--ad-space-6);
+  grid-template-columns: 1fr;
+}
+
+/* A grid item's default `min-width: auto` refuses to shrink below its
+   content, so one long word in a card widens the whole track. */
+.ad-grid > * { min-width: 0; }
+
+/* Column counts are the one thing a clamp cannot do, so they are the only
+   reason this file has breakpoints. Everything is single-column until there
+   is genuinely room — a two-up on a 480px phone gives 200px tracks. */
+@media (min-width: 576px) {
+  .ad-grid--3,
+  .ad-grid--4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 768px) {
+  .ad-grid--2 { grid-template-columns: repeat(2, 1fr); }
+  /* iPad portrait is wide enough to show all three service lines at once. */
+  .ad-grid--3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 992px) {
+  .ad-grid--4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* --- Text utilities ------------------------------------------------------ */
+
+.ad-eyebrow {
+  font-family: var(--ad-font-body);
+  font-size: var(--ad-caption);
+  letter-spacing: var(--ad-tracking-caption);
+  text-transform: uppercase;
+  color: var(--ad-text-muted);
+  margin: 0 0 var(--ad-space-3);
+}
+
+.ad-lead {
+  font-size: var(--ad-lead);
+  line-height: var(--ad-leading-body);
+  color: var(--ad-neutral-200);
+}
+
+/* For strings with no spaces to break at — an email address, a URL. Unlike
+   `break-word` this also lets the containing column shrink below the token's
+   width, which is what keeps a 26-character address from forcing a 240px
+   screen to scroll sideways. */
+.ad-wrap-anywhere { overflow-wrap: anywhere; }
+
+.ad-muted   { color: var(--ad-text-muted); }
+.ad-caption { font-size: var(--ad-caption); color: var(--ad-text-muted); }
+.ad-center  { text-align: center; }
+
+/* Visible to screen readers, not to the eye — used for the icon-only menu
+   button's label. */
+.ad-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The site's signature: accent-toned words inside a heading. */
+.hero_span { color: var(--ad-accent); }
+
+.ad-divider {
+  height: 1px;
+  border: 0;
+  background: var(--ad-border);
+  margin: var(--ad-space-12) 0;
+}

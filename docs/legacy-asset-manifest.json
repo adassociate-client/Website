@@ -1,0 +1,97 @@
+{
+  "note": "All files below were downloaded from the live site on 2026-07-26 and renamed to semantic names. `source` is the original URL.",
+  "origin": "https://cantinanegrita.com",
+  "images": [
+    {
+      "file": "logo.svg",
+      "role": "brand-logo",
+      "usage": "Header / nav brand mark, footer",
+      "source": "https://cantinanegrita.com/wp-content/uploads/2023/04/logo-1.svg"
+    },
+    {
+      "file": "favicon.svg",
+      "role": "favicon",
+      "usage": "Browser tab icon",
+      "source": "https://cantinanegrita.com/wp-content/uploads/2023/04/favicon.svg"
+    },
+    {
+      "file": "hero-video.mp4",
+      "role": "hero-background-video",
+      "usage": "Autoplay, loop, muted, playsinline background behind the hero heading. Use bar-drinks.jpg as the poster.",
+      "source": "https://cantinanegrita.com/wp-content/uploads/2023/04/VID_24840430_044527_140.mp4"
+    },
+    {
+      "file": "bar-drinks.jpg",
+      "role": "hero-poster",
+      "usage": "Video poster frame / fallback hero still",
+      "source": "https://cantinanegrita.com/wp-content/uploads/2023/04/bartender-hand-at-multicolored-fashion-drinks-1536x962.jpg"
+    },
+    {
+      "file": "feature-1.png",
+      "role": "feature-image",
+      "usage": "Image box — Sabores auténticos de la gastronomía yucateca",
+      "source": "https://cantinanegrita.com/wp-content/uploads/elementor/thumbs/750x1024-q6wa4ijqdgvlsb0f99hso2g8u6s8dtsu0kqvse86bk.png"
+    },
+    {
+      "file": "feature-2.png",
+      "role": "feature-image",
+      "usage": "Image box — Un espacio que combina historia y tradición",
+      "source": "https://cantinanegrita.com/wp-content/uploads/elementor/thumbs/750x1024-q6wa4ijqdgvlsb0f99hso2g8u6s8dtsu0kqw4yptz4.png"
+    },
+    {
+      "file": "feature-3.png",
+      "role": "feature-image",
+      "usage": "Image box — Amplia selección de bebidas para todos los gustos",
+      "source": "https://cantinanegrita.com/wp-content/uploads/elementor/thumbs/829x1024-q6wa33sguq7n27jtjcv62t2d5h6v9oy1skz2p36fwg.png"
+    },
+    {
+      "file": "gallery-1.png",
+      "role": "gallery-slide",
+      "usage": "Swiper gallery slide 1 de 4",
+      "source": "https://cantinanegrita.com/wp-content/uploads/2023/04/800x1075_1-768x1032.png"
+    },
+    {
+      "file": "gallery-2.png",
+      "role": "gallery-slide",
+      "usage": "Swiper gallery slide 2 de 4",
+      "source": "https://cantinanegrita.com/wp-content/uploads/2023/04/800x1075_2-768x1032.png"
+    },
+    {
+      "file": "gallery-3.png",
+      "role": "gallery-slide",
+      "usage": "Swiper gallery slide 3 de 4",
+      "source": "https://cantinanegrita.com/wp-content/uploads/2023/04/800x1075_3-768x1032.png"
+    },
+    {
+      "file": "gallery-4.png",
+      "role": "gallery-slide",
+      "usage": "Swiper gallery slide 4 de 4",
+      "source": "https://cantinanegrita.com/wp-content/uploads/2023/04/800x1075_4-768x1032.png"
+    },
+    {
+      "file": "badge-cantina.png",
+      "role": "decorative-badge",
+      "usage": "Round brand badge / seal",
+      "source": "https://cantinanegrita.com/wp-content/uploads/2023/04/1024_2.png"
+    },
+    {
+      "file": "badge-negrita.png",
+      "role": "decorative-badge",
+      "usage": "Round brand badge / seal",
+      "source": "https://cantinanegrita.com/wp-content/uploads/2023/04/1024_3.png"
+    },
+    {
+      "file": "instagram-1.jpg",
+      "role": "social-tile",
+      "usage": "Instagram feed tile",
+      "source": "https://cantinanegrita.com/wp-content/uploads/2023/07/355862403_654339653398973_4487237648010654778_n.jpg"
+    }
+  ],
+  "rules": [
+    "Images are cropped with object-fit: cover — never distorted.",
+    "Feature and gallery images use a 3/4 aspect ratio.",
+    "All images take a 1px #181d23 border and 10px radius when framed.",
+    "Darken media with the #000 55% scrim, never with a blur filter."
+  ],
+  "licensing": "These are La Negrita Cantina's own brand assets, mirrored for local development. Do not redistribute or use them for another brand."
+}

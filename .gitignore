@@ -1,0 +1,29 @@
+node_modules/
+.next/
+out/
+build/
+.env
+.env*.local
+!.env.example
+*.tsbuildinfo
+
+# SQLite database files
+prisma/*.db
+prisma/*.db-journal
+
+# Prisma 7 emits the client into the source tree; it is a build artifact
+src/generated/
+next-env.d.ts
+.DS_Store
+
+# Per-machine Claude Code settings — the shared .claude/settings.json is
+# tracked, this one is personal.
+.claude/settings.local.json
+
+# Raw video exports left in the project root (~25MB, unreferenced). The hero
+# uses the encoded copy at public/assets/images/hero-video.mp4; these are the
+# masters it was cut from. Git history is permanent, so they are kept out of
+# it — store them wherever the rest of the source media lives. To commit one
+# anyway: git add -f "<filename>"
+/*.mov
+/Website_Hero_Video_*.mp4
