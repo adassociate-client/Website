@@ -29,10 +29,10 @@
     "id": "home",
     "headingParts": [
       { "text": "AD Associates", "accent": true },
-      { "text": " — Built for ", "accent": false },
+      { "text": " – Built for ", "accent": false },
       { "text": "every site.", "accent": true }
     ],
-    "headingPlain": "AD Associates — Built for every site.",
+    "headingPlain": "AD Associates – Built for every site.",
     "subheading": "Portable toilets and security cabins that work as hard as you do",
     "video": "/assets/images/hero-video.mp4",
     "poster": "/assets/images/hero-poster.jpg",
