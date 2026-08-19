@@ -1,4 +1,6 @@
 import { ok, withErrorHandling } from "@/server/http";
+import { limitRequest } from "@/server/rate-limit";
+import { READ_RATE_LIMIT, READ_RATE_WINDOW_MS } from "@/server/constants";
 import { contactChannelsForProduct, listContactChannels } from "@/server/services/contact";
 import { slugSchema } from "@/server/validation";
 
@@ -10,6 +12,8 @@ export const dynamic = "force-dynamic";
  * `?product=<slug>` deep-links WhatsApp to a message naming that item.
  */
 export const GET = withErrorHandling(async (request: Request) => {
+  limitRequest(request, "contact", READ_RATE_LIMIT, READ_RATE_WINDOW_MS);
+
   const { searchParams } = new URL(request.url);
   const productParam = searchParams.get("product");
 

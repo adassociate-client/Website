@@ -1,5 +1,7 @@
 import { prisma } from "@/server/db";
 import { ok, withErrorHandling } from "@/server/http";
+import { limitRequest } from "@/server/rate-limit";
+import { READ_RATE_LIMIT, READ_RATE_WINDOW_MS } from "@/server/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -7,7 +9,9 @@ export const dynamic = "force-dynamic";
  * Liveness + database reachability. Deliberately cheap: a `SELECT 1`, not a
  * table scan, so it can be polled by a load balancer without cost.
  */
-export const GET = withErrorHandling(async () => {
+export const GET = withErrorHandling(async (request: Request) => {
+  limitRequest(request, "health", READ_RATE_LIMIT, READ_RATE_WINDOW_MS);
+
   const startedAt = Date.now();
   let database: "up" | "down" = "up";
 

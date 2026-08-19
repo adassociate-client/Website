@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   DEFAULT_PAGE_SIZE,
+  MAX_OFFSET,
   MAX_PAGE_SIZE,
   PRODUCT_SORTS,
 } from "./constants";
@@ -20,7 +21,12 @@ export const productQuerySchema = z.object({
   available: queryBool,
   sort: z.enum(PRODUCT_SORTS).default("order"),
   limit: z.coerce.number().int().positive().max(MAX_PAGE_SIZE).default(DEFAULT_PAGE_SIZE),
-  offset: z.coerce.number().int().min(0).default(0),
+  /**
+   * Capped, not merely non-negative. SQLite answers a large OFFSET by
+   * walking and discarding every preceding row, so an uncapped value is a
+   * full table scan that costs the caller nothing to request.
+   */
+  offset: z.coerce.number().int().min(0).max(MAX_OFFSET).default(0),
 });
 
 export type ProductQuery = z.infer<typeof productQuerySchema>;

@@ -3,14 +3,14 @@
 
   "site": {
     "name": "AD Associates",
-    "title": "AD Associates — Strategy & Advisory",
-    "description": "AD Associates is an advisory firm working with leadership teams on strategy, operations and transactions. Small teams, senior people, direct answers.",
-    "tagline": "Advisory that holds up under pressure",
+    "title": "AD Associates — Portable Security Cabins & Toilets",
+    "description": "Portable security cabins and sanitary ware, built at scale and checked one at a time. Supplying sites across Coimbatore, Tamil Nadu.",
+    "tagline": "Built for every site",
     "url": "https://adassociates.com",
     "language": "en",
     "founded": 2014,
     "logo": "/assets/images/logo.png",
-    "favicon": "/assets/images/favicon.svg"
+    "favicon": "/assets/images/favicon.png"
   },
 
   "nav": {
@@ -132,7 +132,7 @@
   ],
 
   "footer": {
-    "tagline": "Advisory that holds up under pressure",
+    "tagline": "Strong. Swift. Secure.",
     "visitLabel": "Office",
     "followLabel": "Follow",
     "addressLines": [

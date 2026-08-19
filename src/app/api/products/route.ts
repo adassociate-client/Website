@@ -1,4 +1,6 @@
 import { ok, withErrorHandling } from "@/server/http";
+import { limitRequest } from "@/server/rate-limit";
+import { READ_RATE_LIMIT, READ_RATE_WINDOW_MS } from "@/server/constants";
 import { listProducts } from "@/server/services/products";
 import { productQuerySchema, searchParamsToObject } from "@/server/validation";
 
@@ -16,6 +18,8 @@ export const dynamic = "force-dynamic";
  * field named, rather than being silently coerced.
  */
 export const GET = withErrorHandling(async (request: Request) => {
+  limitRequest(request, "products", READ_RATE_LIMIT, READ_RATE_WINDOW_MS);
+
   const { searchParams } = new URL(request.url);
   const query = productQuerySchema.parse(searchParamsToObject(searchParams));
 

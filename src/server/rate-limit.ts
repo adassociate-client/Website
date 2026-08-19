@@ -1,4 +1,6 @@
 import { ApiError } from "./http";
+import { clientIp, hashIp } from "./client";
+import { MAX_RATE_LIMIT_KEYS } from "./constants";
 
 /**
  * Fixed-window rate limiter, in process memory.
@@ -44,6 +46,23 @@ export function consume(key: string, limit: number, windowMs: number): RateLimit
     lastSweep = now;
   }
 
+  // The key derives from a client-supplied header, so an attacker rotating
+  // X-Forwarded-For would otherwise allocate one map entry per request and
+  // grow this map until the process dies. Past the cap, sweep early; if that
+  // frees nothing, every window is still live and the load is real, so shed
+  // rather than allocate.
+  if (!hits.has(key) && hits.size >= MAX_RATE_LIMIT_KEYS) {
+    sweep(now);
+    if (hits.size >= MAX_RATE_LIMIT_KEYS) {
+      throw new ApiError(
+        "rate_limited",
+        "Server is shedding load. Try again shortly.",
+        undefined,
+        { "Retry-After": "60" },
+      );
+    }
+  }
+
   const existing = hits.get(key);
   const window =
     existing && existing.resetAt > now ? existing : { count: 0, resetAt: now + windowMs };
@@ -74,4 +93,26 @@ export function consume(key: string, limit: number, windowMs: number): RateLimit
 /** Test seam — lets a suite start from a clean slate. */
 export function resetRateLimits() {
   hits.clear();
+}
+
+/**
+ * Applies a per-client budget to a route.
+ *
+ * Previously only POST /api/enquiries was limited, which left every read
+ * endpoint open — and those are the expensive ones: `?q=` runs an unindexed
+ * LIKE across the catalogue on each call.
+ *
+ * The client key is a hashed IP taken from forwarded headers, which a direct
+ * caller can spoof. That is why this is a cost control and not a security
+ * boundary: it raises the price of casual abuse, while `consume` caps total
+ * bucket count so spoofing cannot exhaust memory either. A shared store
+ * (Redis/Upstash) is what makes this authoritative across instances.
+ */
+export function limitRequest(
+  request: Request,
+  scope: string,
+  limit: number,
+  windowMs: number,
+): RateLimitResult {
+  return consume(`${scope}:${hashIp(clientIp(request))}`, limit, windowMs);
 }

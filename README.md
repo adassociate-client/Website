@@ -87,6 +87,58 @@ running process has already loaded the stale binary.
 surfaces as `Cannot find module './331.js'` on every route. Stop the dev
 server first; if it has already happened, delete `.next/` and restart.
 
+## Hardening
+
+What the application controls is closed. What it does not is stated at the
+bottom, because the gap matters more than the list.
+
+**Security headers** (`next.config.ts`, applied to every route). CSP built
+from what the page actually loads and verified against a real render with
+zero violations: self-hosted fonts and video, no third-party scripts, one
+Google Maps iframe. Plus `nosniff`, `frame-ancestors 'none'` and
+`X-Frame-Options: DENY`, `Referrer-Policy`, a `Permissions-Policy` declining
+camera/mic/geolocation, HSTS in production, and `poweredByHeader: false`.
+
+CSP keeps `'unsafe-inline'` for scripts and styles. Next streams the RSC
+payload through inline `<script>` tags and the design kit uses inline style
+attributes; removing it needs a per-request nonce, which forces dynamic
+rendering and gives up the static prerender. The trade holds *because the
+page renders no user-supplied content* — every string comes from a
+build-time JSON file, so there is no path for injected script to arrive.
+Add a nonce via middleware the moment that changes.
+
+**Rate limiting.** Previously only `POST /api/enquiries`. Now every route:
+reads get `READ_RATE_LIMIT` (120/min, configurable), enquiries keep their
+stricter budget. The read endpoints were the exposed ones — `?q=` runs an
+unindexed LIKE across the catalogue on every call.
+
+**Request bodies are capped at 64KB** and enforced by counting bytes as they
+stream, not by trusting `Content-Length` — which is absent under chunked
+encoding and can lie. Verified: a 293KB body is refused with 413 both with
+and without a declared length.
+
+**`offset` is capped at 10,000.** SQLite answers a large OFFSET by walking
+and discarding every preceding row, so `?offset=999999999` was a full table
+scan that cost the caller nothing to send.
+
+**The limiter's map is capped.** Its key derives from `X-Forwarded-For`,
+which a direct caller sets freely, so without a ceiling an attacker rotating
+that header allocates one entry per request until the process dies. Past the
+cap it sweeps, and sheds load if that frees nothing.
+
+### What this does not protect against
+
+- **Volumetric DDoS.** Absorbed at the network edge, not in application
+  code. Put the site behind Cloudflare or Vercel's WAF and enable bot
+  protection; nothing in this repo substitutes for that.
+- **A distributed or spoofed source.** The limiter keys on a header the
+  client controls, so it raises the cost of casual abuse and is not a
+  security boundary.
+- **Multiple instances.** Counters live in process memory, so each serverless
+  instance keeps its own. Move `hits` in `rate-limit.ts` to Redis/Upstash to
+  make the limit authoritative; `consume`'s signature is designed not to
+  change when you do.
+
 ## Deploying
 
 The build runs without a `.env` and without a database, so a clean checkout

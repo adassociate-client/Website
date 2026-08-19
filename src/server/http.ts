@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
+import { MAX_BODY_BYTES } from "./constants";
 
 /**
  * One response shape for the whole API.
@@ -24,6 +25,7 @@ export type ErrorCode =
   | "validation_failed"
   | "not_found"
   | "rate_limited"
+  | "payload_too_large"
   | "conflict"
   | "internal_error";
 
@@ -32,6 +34,7 @@ const STATUS_FOR: Record<ErrorCode, number> = {
   validation_failed: 422,
   not_found: 404,
   rate_limited: 429,
+  payload_too_large: 413,
   conflict: 409,
   internal_error: 500,
 };
@@ -97,10 +100,61 @@ export function withErrorHandling<Args extends unknown[]>(
   };
 }
 
-/** Parses a JSON body, turning malformed JSON into a clean 400. */
-export async function readJson(request: Request): Promise<unknown> {
+/**
+ * Reads the body with a hard byte ceiling, then parses it as JSON.
+ *
+ * `request.json()` buffers whatever arrives before anything can inspect it,
+ * so a single request could pin memory well before Zod ever saw the payload.
+ * This streams instead and aborts the moment the limit is passed, so an
+ * oversized body costs the bytes read so far and nothing more.
+ *
+ * Content-Length is checked first as a cheap rejection, but it is only a
+ * hint — it can be absent under chunked encoding and it can lie — so the
+ * running total is what actually enforces the limit.
+ */
+export async function readJson(
+  request: Request,
+  maxBytes: number = MAX_BODY_BYTES,
+): Promise<unknown> {
+  const tooLarge = () =>
+    new ApiError(
+      "payload_too_large",
+      `Request body must be ${maxBytes} bytes or fewer`,
+    );
+
+  const declared = Number(request.headers.get("content-length"));
+  if (Number.isFinite(declared) && declared > maxBytes) throw tooLarge();
+
+  if (!request.body) throw new ApiError("bad_request", "Request body is required");
+
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+
   try {
-    return await request.json();
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      total += value.byteLength;
+      if (total > maxBytes) {
+        await reader.cancel();
+        throw tooLarge();
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+
+  const body = new Uint8Array(total);
+  let at = 0;
+  for (const chunk of chunks) {
+    body.set(chunk, at);
+    at += chunk.byteLength;
+  }
+
+  try {
+    return JSON.parse(new TextDecoder().decode(body));
   } catch {
     throw new ApiError("bad_request", "Request body must be valid JSON");
   }

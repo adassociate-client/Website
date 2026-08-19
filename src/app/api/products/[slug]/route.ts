@@ -1,4 +1,6 @@
 import { ok, withErrorHandling } from "@/server/http";
+import { limitRequest } from "@/server/rate-limit";
+import { READ_RATE_LIMIT, READ_RATE_WINDOW_MS } from "@/server/constants";
 import { contactChannelsForProduct } from "@/server/services/contact";
 import { getProductBySlug, getRelatedProducts } from "@/server/services/products";
 import { slugSchema } from "@/server/validation";
@@ -13,7 +15,9 @@ export const dynamic = "force-dynamic";
  * round trip, so the "further enquiries" path is one tap from the item.
  */
 export const GET = withErrorHandling(
-  async (_request: Request, context: { params: Promise<{ slug: string }> }) => {
+  async (request: Request, context: { params: Promise<{ slug: string }> }) => {
+    limitRequest(request, "product", READ_RATE_LIMIT, READ_RATE_WINDOW_MS);
+
     const { slug: rawSlug } = await context.params;
     const slug = slugSchema.parse(rawSlug);
 
