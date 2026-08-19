@@ -18,6 +18,7 @@
     "links": [
       { "label": "Home", "href": "#home" },
       { "label": "About", "href": "#about" },
+      { "label": "Products", "href": "#products" },
       { "label": "Approach", "href": "#approach" },
       { "label": "Work", "href": "#work" },
       { "label": "Contact", "href": "#contact" }
@@ -55,26 +56,31 @@
     ]
   },
 
-  "capabilities": [
-    {
-      "title": "Strategy and growth",
-      "description": "Where to compete and what to stop doing. Market and competitor analysis, portfolio decisions, pricing, and growth plans that survive contact with a budget.",
-      "image": "/assets/images/feature-1.png",
-      "alt": "A strategy working session"
-    },
-    {
-      "title": "Operations and performance",
-      "description": "Turning intent into throughput. Process and cost diagnostics, operating model design, and the unglamorous follow-through that makes a change stick past the first quarter.",
-      "image": "/assets/images/feature-2.png",
-      "alt": "An operations review in progress"
-    },
-    {
-      "title": "Transaction support",
-      "description": "Commercial and operational due diligence, valuation support, and post-deal integration planning — so the thesis you underwrote is the one you end up owning.",
-      "image": "/assets/images/feature-3.png",
-      "alt": "A transaction advisory discussion"
-    }
-  ],
+  "products": {
+    "id": "products",
+    "eyebrow": "Products",
+    "heading": "What we build",
+    "items": [
+      {
+        "title": "Strategy and growth",
+        "description": "Where to compete and what to stop doing. Market and competitor analysis, portfolio decisions, pricing, and growth plans that survive contact with a budget.",
+        "image": "/assets/images/feature-1.png",
+        "alt": "A strategy working session"
+      },
+      {
+        "title": "Operations and performance",
+        "description": "Turning intent into throughput. Process and cost diagnostics, operating model design, and the unglamorous follow-through that makes a change stick past the first quarter.",
+        "image": "/assets/images/feature-2.png",
+        "alt": "An operations review in progress"
+      },
+      {
+        "title": "Transaction support",
+        "description": "Commercial and operational due diligence, valuation support, and post-deal integration planning — so the thesis you underwrote is the one you end up owning.",
+        "image": "/assets/images/feature-3.png",
+        "alt": "A transaction advisory discussion"
+      }
+    ]
+  },
 
   "approach": {
     "id": "approach",

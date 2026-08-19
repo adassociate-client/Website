@@ -1,6 +1,6 @@
-import type { Capability } from "@/types/content";
+import type { Product } from "@/types/content";
 
-type ImageBoxProps = Capability;
+type ImageBoxProps = Product;
 
 /**
  * `.ad-image-box` — the site's core content block: capped image header over a

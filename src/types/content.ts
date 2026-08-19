@@ -82,11 +82,19 @@ export interface About {
   stats: Stat[];
 }
 
-export interface Capability {
+/** One card in the Products grid. */
+export interface Product {
   title: string;
   description: string;
   image: string;
   alt: string;
+}
+
+export interface Products {
+  id: string;
+  eyebrow: string;
+  heading: string;
+  items: Product[];
 }
 
 export interface Approach {
@@ -150,7 +158,7 @@ export interface Content {
   nav: Nav;
   hero: Hero;
   about: About;
-  capabilities: Capability[];
+  products: Products;
   approach: Approach;
   work: Work;
   contact: Contact;

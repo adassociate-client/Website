@@ -3,9 +3,9 @@ import Nav from "@/components/layout/Nav";
 import SkipLink from "@/components/layout/SkipLink";
 import About from "@/components/sections/About";
 import Approach from "@/components/sections/Approach";
-import Capabilities from "@/components/sections/Capabilities";
 import Contact from "@/components/sections/Contact";
 import Hero from "@/components/sections/Hero";
+import Products from "@/components/sections/Products";
 import Work from "@/components/sections/Work";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import * as content from "@/data/content";
@@ -23,7 +23,7 @@ export default function Home() {
       <main id="content">
         <Hero hero={content.hero} />
         <About about={content.about} />
-        <Capabilities capabilities={content.capabilities} />
+        <Products products={content.products} />
         <Approach approach={content.approach} />
         <Work work={content.work} />
         <Contact contact={content.contact} social={content.social} />

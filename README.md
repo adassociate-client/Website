@@ -127,11 +127,11 @@ Two things had to change before any of this built at all, both worth keeping:
 src/
 ├─ app/
 │  ├─ layout.tsx      <html lang> + metadata, pulled from content.json
-│  ├─ page.tsx        composes the six blocks in order
+│  ├─ page.tsx        composes the six sections in order
 │  └─ globals.css     @imports the six stylesheets, cascade order fixed
 ├─ components/
 │  ├─ layout/         SkipLink · Nav · NavMenu · Footer
-│  ├─ sections/       Hero · About · Capabilities · Approach · Work · Contact
+│  ├─ sections/       Hero · About · Products · Approach · Work · Contact
 │  └─ ui/             Button · Eyebrow · Section · Stat · ImageBox ·
 │                     Reveal · ScrollReveal
 ├─ data/              content.json + typed accessor

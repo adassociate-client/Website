@@ -15,7 +15,7 @@ export const {
   nav,
   hero,
   about,
-  capabilities,
+  products,
   approach,
   work,
   contact,
