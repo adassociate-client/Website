@@ -1,5 +1,6 @@
 import type { CSSProperties } from "react";
 import Button from "@/components/ui/Button";
+import HeroMedia from "@/components/sections/HeroMedia";
 import type { Hero as HeroData } from "@/types/content";
 
 interface HeroProps {
@@ -19,16 +20,7 @@ export default function Hero({ hero }: HeroProps) {
       // drops the looping video and shows this still instead.
       style={{ "--ad-hero-poster": `url(${hero.poster})` } as CSSProperties}
     >
-      <video
-        className="ad-hero__media"
-        autoPlay
-        loop
-        muted
-        playsInline
-        poster={hero.poster}
-      >
-        <source src={hero.video} type="video/mp4" />
-      </video>
+      <HeroMedia video={hero.video} poster={hero.poster} />
 
       <div className="ad-hero__scrim" />
 

@@ -63,19 +63,19 @@
       {
         "title": "Strategy and growth",
         "description": "Where to compete and what to stop doing. Market and competitor analysis, portfolio decisions, pricing, and growth plans that survive contact with a budget.",
-        "image": "/assets/images/feature-1.png",
+        "image": "/assets/images/feature-1.jpg",
         "alt": "A strategy working session"
       },
       {
         "title": "Operations and performance",
         "description": "Turning intent into throughput. Process and cost diagnostics, operating model design, and the unglamorous follow-through that makes a change stick past the first quarter.",
-        "image": "/assets/images/feature-2.png",
+        "image": "/assets/images/feature-2.jpg",
         "alt": "An operations review in progress"
       },
       {
         "title": "Transaction support",
         "description": "Commercial and operational due diligence, valuation support, and post-deal integration planning — so the thesis you underwrote is the one you end up owning.",
-        "image": "/assets/images/feature-3.png",
+        "image": "/assets/images/feature-3.jpg",
         "alt": "A transaction advisory discussion"
       }
     ]
@@ -86,10 +86,10 @@
     "eyebrow": "Work",
     "heading": "Selected engagements",
     "images": [
-      { "src": "/assets/images/gallery-1.png", "alt": "Engagement highlight, 1 of 4" },
-      { "src": "/assets/images/gallery-2.png", "alt": "Engagement highlight, 2 of 4" },
-      { "src": "/assets/images/gallery-3.png", "alt": "Engagement highlight, 3 of 4" },
-      { "src": "/assets/images/gallery-4.png", "alt": "Engagement highlight, 4 of 4" }
+      { "src": "/assets/images/gallery-1.jpg", "alt": "Engagement highlight, 1 of 4" },
+      { "src": "/assets/images/gallery-2.jpg", "alt": "Engagement highlight, 2 of 4" },
+      { "src": "/assets/images/gallery-3.jpg", "alt": "Engagement highlight, 3 of 4" },
+      { "src": "/assets/images/gallery-4.jpg", "alt": "Engagement highlight, 4 of 4" }
     ]
   },
 

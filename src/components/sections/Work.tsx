@@ -17,7 +17,15 @@ export default function Work({ work }: WorkProps) {
 
         <Reveal className="ad-gallery">
           {work.images.map((image) => (
-            <img key={image.src} src={image.src} alt={image.alt} />
+            <img
+              key={image.src}
+              src={image.src}
+              alt={image.alt}
+              width={700}
+              height={933}
+              loading="lazy"
+              decoding="async"
+            />
           ))}
         </Reveal>
       </div>

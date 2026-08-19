@@ -87,6 +87,47 @@ running process has already loaded the stale binary.
 surfaces as `Cannot find module './331.js'` on every route. Stop the dev
 server first; if it has already happened, delete `.next/` and restart.
 
+## Weight
+
+The site was shipping **26MB to a phone**, which is why it read as broken on
+a mobile connection — the page never finished, so anything below the fold
+looked blank rather than slow.
+
+| | before | after |
+|---|---|---|
+| phone (390px) | 26.0 MB | **0.76 MB** |
+| tablet / desktop | 26.0 MB | **2.95 MB** |
+
+**Photographs were PNGs.** Seven of them, ~1.1MB each, at roughly three
+times their displayed size. Re-encoded as JPEG, centre-cropped to the aspect
+the CSS already crops to and sized for a 2x screen: 7.79 MB to 561 KB.
+
+**Every image loaded eagerly**, including the gallery at the bottom of the
+page, competing with content the visitor could actually see. Below-the-fold
+images are now `loading="lazy"` with intrinsic `width`/`height` so the
+browser reserves their space and nothing shifts as they arrive.
+
+**The hero video was 18MB of 4K, and in HEVC.** Two separate problems:
+
+- HEVC in MP4 does not play in Firefox, and only plays in Chrome where the
+  platform has hardware support. Some visitors were seeing the poster still
+  and no video at all, silently. It is now H.264 High, which plays anywhere.
+- 4K to render at most 1920px wide, with an audio track on a permanently
+  muted element. Re-encoded to 1920x636, audio dropped, `+faststart` so
+  playback can begin before the file is complete: 18.03 MB to 2.19 MB.
+
+**Phones do not fetch it at all.** `HeroMedia` decides client-side whether
+the video is worth the bytes — held back below 768px, on a save-data or
+2G/3G connection at any size, and under `prefers-reduced-motion`. The hero
+paints its poster as a background either way, so the section looks finished
+rather than empty, at 120KB instead of 18MB. It is also the reason the
+reduced-motion path now *skips the download* rather than hiding the element
+after it has already arrived.
+
+Verified across watches (240px), phones, foldables, tablets, laptops,
+projectors (XGA 1024x768 through 4K) and ultrawide: no overflow, no
+under-sized tap targets, and every section reachable and revealed.
+
 ## Hardening
 
 What the application controls is closed. What it does not is stated at the
@@ -405,7 +446,7 @@ is a seed-and-config change rather than a schema one.
 **Imagery is still partly the cantina's.** The hero video and its poster are
 now the firm's own site footage, but the feature and gallery images remain
 photographs of a Mexican cantina. Files were renamed to neutral names
-(`feature-1.png`, `gallery-1.png`) — the pictures themselves cannot be
+(`feature-1.jpg`, `gallery-1.jpg`) — the pictures themselves cannot be
 rebranded, so they need replacing.
 
 The two `badge-*.png` files went with the About section's photo slot when it
