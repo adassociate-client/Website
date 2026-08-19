@@ -140,6 +140,14 @@ src/
 └─ types/content.ts   the shape of content.json
 ```
 
+The About heading contains two `\u200b` escapes (U+200B, zero-width space).
+"Strong.Swift.Secure" has no spaces, so it is a single 19-character token: the
+browser had no legal place to break it and fell back to `overflow-wrap:
+break-word`, splitting it mid-word as "Strong.Swift.Se / cure". The escapes add
+break opportunities at the full stops without adding visible space. They are
+written as JSON escapes rather than pasted characters so they are visible to
+anyone editing the file — delete them and the mid-word breaking returns.
+
 Only `SkipLink`, `ScrollReveal` and `NavMenu` are client components — every
 section is a server component, so the page ships almost no JavaScript.
 
