@@ -50,8 +50,10 @@
       "a question worth answering"
     ],
     "cta": { "label": "Start a conversation", "href": "#contact" },
-    "stat": { "value": "250+", "label": "Products Delivered" },
-    "badge": { "src": "/assets/images/badge-primary.png", "alt": "" }
+    "stats": [
+      { "value": "250+", "label": "Products Delivered" },
+      { "value": "180+", "label": "Customers Served" }
+    ]
   },
 
   "capabilities": [

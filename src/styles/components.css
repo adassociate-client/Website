@@ -564,11 +564,10 @@
 
 /* --- About ---------------------------------------------------------------- */
 
-.ad-about__badge {
-  /* A flat max-width of 280px is wider than a 240px watch screen, and the
-     badge was pushing the page sideways there. min() caps it at the column. */
-  max-width: min(280px, 100%);
-  margin-inline: auto;
+.ad-about__stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ad-space-4);
 }
 
 /* --- Contact -------------------------------------------------------------- */

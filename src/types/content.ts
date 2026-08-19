@@ -78,8 +78,8 @@ export interface About {
   body: string;
   emphasis: string[];
   cta: Link;
-  stat: Stat;
-  badge: Media;
+  /** Headline figures, rendered as a stacked column. */
+  stats: Stat[];
 }
 
 export interface Capability {

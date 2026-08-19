@@ -347,13 +347,18 @@ is a seed-and-config change rather than a schema one.
 | | Current placeholder |
 |---|---|
 | Service lines & prices | plausible advisory offerings, invented round numbers |
-| "250+ Engagements Delivered" | invented figure |
+| "250+ Products Delivered", "180+ Customers Served" | invented figures |
 | Founded 2014 | invented |
 
-**Imagery is still the cantina's.** The hero video is bar footage, and the
-feature, gallery and badge images are photographs of a Mexican cantina. Files
-were renamed to neutral names (`approach.jpg`, `badge-primary.png`) but the
-pictures themselves cannot be rebranded — replace them.
+**Imagery is still partly the cantina's.** The hero video and its poster are
+now the firm's own site footage, but the feature and gallery images remain
+photographs of a Mexican cantina. Files were renamed to neutral names
+(`approach.jpg`, `feature-1.png`) — the pictures themselves cannot be
+rebranded, so they need replacing.
+
+The two `badge-*.png` files went with the About section's photo slot when it
+became a second stat tile. `logo.svg`, `logo-previous.svg` and `social-1.jpg`
+are still present but unreferenced.
 
 The brand mark is `logo.png` — the real AD monogram, white on transparent.
 The supplied artwork was white on opaque black with 68% of its canvas as

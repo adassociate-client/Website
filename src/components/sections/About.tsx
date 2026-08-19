@@ -10,7 +10,7 @@ interface AboutProps {
   about: AboutData;
 }
 
-/** Two-up: who the firm is on the left, the headline stat and badge on the right. */
+/** Two-up: who the firm is on the left, the headline figures on the right. */
 export default function About({ about }: AboutProps) {
   return (
     <Section id={about.id} variant="tall">
@@ -22,13 +22,12 @@ export default function About({ about }: AboutProps) {
           <Button href={about.cta.href}>{about.cta.label}</Button>
         </Reveal>
 
-        <Reveal>
-          <Stat
-            value={about.stat.value}
-            label={about.stat.label}
-            style={{ marginBottom: "var(--ad-space-4)" }}
-          />
-          <img className="ad-about__badge" src={about.badge.src} alt={about.badge.alt} />
+        {/* A list rather than a fixed pair: the spacing comes from the
+            container's gap, so adding a third figure needs no layout change. */}
+        <Reveal className="ad-about__stats">
+          {about.stats.map((stat) => (
+            <Stat key={stat.label} value={stat.value} label={stat.label} />
+          ))}
         </Reveal>
       </div>
     </Section>
