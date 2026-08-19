@@ -30,10 +30,10 @@
     "headingParts": [
       { "text": "AD Associates", "accent": true },
       { "text": " – Built for ", "accent": false },
-      { "text": "every site.", "accent": true }
+      { "text": "Every Site.", "accent": true }
     ],
-    "headingPlain": "AD Associates – Built for every site.",
-    "subheading": "Portable toilets and security cabins that work as hard as you do",
+    "headingPlain": "AD Associates – Built for Every Site.",
+    "subheading": "Portable security cabins and toilets that work as hard as you do",
     "video": "/assets/images/hero-video.mp4",
     "poster": "/assets/images/hero-poster.jpg",
     "cta": { "label": "Start a conversation", "href": "#contact" }
@@ -50,7 +50,7 @@
       "a question worth answering"
     ],
     "cta": { "label": "Start a conversation", "href": "#contact" },
-    "stat": { "value": "250+", "label": "Engagements Delivered" },
+    "stat": { "value": "250+", "label": "Products Delivered" },
     "badge": { "src": "/assets/images/badge-primary.png", "alt": "" }
   },
 
