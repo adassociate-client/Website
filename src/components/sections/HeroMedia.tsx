@@ -8,33 +8,37 @@ interface HeroMediaProps {
 }
 
 /**
- * Decides whether the hero video is worth fetching, and only then mounts it.
+ * Mounts the hero video once it is clear the visitor can afford it.
  *
- * The file is 18MB. Rendering the <video> on the server meant every phone
- * downloaded all of it before the rest of the page could finish — which is
- * what made the site feel like it never loaded on a mobile connection. It also
- * bought very little there: the footage is a 3:1 cinematic crop, so a portrait
- * phone only ever sees about 22% of the frame.
+ * It plays on phones. It did not while the file was 18MB of 4K, which was the
+ * whole reason the site could not be browsed on a mobile connection; now that
+ * it is 2.2MB of H.264 the width test it used to fail is no longer measuring
+ * anything real, so it is gone.
+ *
+ * Two checks remain, and both describe an actual constraint rather than a
+ * guess about the device:
+ *
+ *   - Save-Data, or a 2G/3G connection. Someone who has asked their browser to
+ *     conserve data has said so explicitly, and a decorative loop is precisely
+ *     what that setting is for.
+ *   - prefers-reduced-motion. The stylesheet also hides the element, but
+ *     hiding happens after the bytes have arrived; not fetching is better.
  *
  * Where the video is skipped the hero still shows its poster still, because
- * `.ad-hero` paints it as a background regardless — so the section looks
- * finished rather than empty, and costs 120KB instead of 18MB.
+ * `.ad-hero` paints it as a background either way — so the section looks
+ * finished rather than empty, at 120KB.
  *
- * Held back for narrow screens, for a saver/slow connection at any size, and
- * for prefers-reduced-motion — the last of which the stylesheet also hides,
- * but hiding happens after the download, and not fetching is the better
- * outcome.
+ * `muted` and `playsInline` are what make autoplay legal on iOS and Android;
+ * without both, mobile Safari refuses to start and shows a paused frame.
  */
 export default function HeroMedia({ video, poster }: HeroMediaProps) {
   const [shouldPlay, setShouldPlay] = useState(false);
 
   useEffect(() => {
-    const wideEnough = window.matchMedia("(min-width: 768px)").matches;
     const motionWelcome = !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Network Information API: present on Chromium, absent on Safari/Firefox.
-    // Absent means unknown, and unknown is treated as fine — the width check
-    // is doing the heavy lifting.
+    // Network Information API: Chromium-only. Absent means unknown, and
+    // unknown is treated as fine — this is an opt-out, not a gate.
     const connection = (
       navigator as Navigator & {
         connection?: { saveData?: boolean; effectiveType?: string };
@@ -44,7 +48,7 @@ export default function HeroMedia({ video, poster }: HeroMediaProps) {
       !connection ||
       (!connection.saveData && !/(^|-)2g$|^3g$/.test(connection.effectiveType ?? ""));
 
-    setShouldPlay(wideEnough && motionWelcome && affordable);
+    setShouldPlay(motionWelcome && affordable);
   }, []);
 
   if (!shouldPlay) return null;

@@ -95,7 +95,7 @@ looked blank rather than slow.
 
 | | before | after |
 |---|---|---|
-| phone (390px) | 26.0 MB | **0.76 MB** |
+| phone (390px) | 26.0 MB | **2.95 MB** (0.76 MB where the video is skipped) |
 | tablet / desktop | 26.0 MB | **2.95 MB** |
 
 **Photographs were PNGs.** Seven of them, ~1.1MB each, at roughly three
@@ -116,13 +116,21 @@ browser reserves their space and nothing shifts as they arrive.
   muted element. Re-encoded to 1920x636, audio dropped, `+faststart` so
   playback can begin before the file is complete: 18.03 MB to 2.19 MB.
 
-**Phones do not fetch it at all.** `HeroMedia` decides client-side whether
-the video is worth the bytes — held back below 768px, on a save-data or
-2G/3G connection at any size, and under `prefers-reduced-motion`. The hero
-paints its poster as a background either way, so the section looks finished
-rather than empty, at 120KB instead of 18MB. It is also the reason the
-reduced-motion path now *skips the download* rather than hiding the element
-after it has already arrived.
+**The video plays everywhere, including phones.** It did not while the file
+was 18MB — that was the whole reason the site could not be browsed on a
+mobile connection — so `HeroMedia` held it back below 768px. At 2.2MB that
+width test no longer measures anything real and has been removed.
+
+Two checks remain in `HeroMedia`, both describing an actual constraint
+rather than guessing from screen size: **Save-Data or a 2G/3G connection**,
+where the visitor has explicitly asked to conserve data and a decorative
+loop is exactly what that setting is for; and **prefers-reduced-motion**,
+which the stylesheet also handles, but hiding happens after the bytes have
+arrived and not fetching is better. Where it is skipped the hero still
+paints its poster as a background, so the section looks finished at 120KB.
+
+`muted` and `playsInline` are what make autoplay legal on iOS and Android —
+without both, mobile Safari refuses to start and leaves a paused frame.
 
 Verified across watches (240px), phones, foldables, tablets, laptops,
 projectors (XGA 1024x768 through 4K) and ultrawide: no overflow, no
