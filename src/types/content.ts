@@ -97,16 +97,6 @@ export interface Products {
   items: Product[];
 }
 
-export interface Approach {
-  id: string;
-  eyebrow: string;
-  heading: string;
-  body: string;
-  image: string;
-  alt: string;
-  cta: Link;
-}
-
 export interface Work {
   id: string;
   eyebrow: string;
@@ -159,7 +149,6 @@ export interface Content {
   hero: Hero;
   about: About;
   products: Products;
-  approach: Approach;
   work: Work;
   contact: Contact;
   social: Link[];

@@ -19,7 +19,6 @@
       { "label": "Home", "href": "#home" },
       { "label": "About", "href": "#about" },
       { "label": "Products", "href": "#products" },
-      { "label": "Approach", "href": "#approach" },
       { "label": "Work", "href": "#work" },
       { "label": "Contact", "href": "#contact" }
     ],
@@ -80,16 +79,6 @@
         "alt": "A transaction advisory discussion"
       }
     ]
-  },
-
-  "approach": {
-    "id": "approach",
-    "eyebrow": "Approach",
-    "heading": "Small teams, senior people, direct answers",
-    "body": "We staff engagements thin and senior. You get a partner in the room rather than a pyramid of analysts, and findings as they emerge rather than a reveal in week eight. When the evidence contradicts the brief, we say so.",
-    "image": "/assets/images/approach.jpg",
-    "alt": "The AD Associates team at work",
-    "cta": { "label": "Start a conversation", "href": "#contact" }
   },
 
   "work": {

@@ -2,7 +2,6 @@ import Footer from "@/components/layout/Footer";
 import Nav from "@/components/layout/Nav";
 import SkipLink from "@/components/layout/SkipLink";
 import About from "@/components/sections/About";
-import Approach from "@/components/sections/Approach";
 import Contact from "@/components/sections/Contact";
 import Hero from "@/components/sections/Hero";
 import Products from "@/components/sections/Products";
@@ -24,7 +23,6 @@ export default function Home() {
         <Hero hero={content.hero} />
         <About about={content.about} />
         <Products products={content.products} />
-        <Approach approach={content.approach} />
         <Work work={content.work} />
         <Contact contact={content.contact} social={content.social} />
       </main>

@@ -131,7 +131,7 @@ src/
 │  └─ globals.css     @imports the six stylesheets, cascade order fixed
 ├─ components/
 │  ├─ layout/         SkipLink · Nav · NavMenu · Footer
-│  ├─ sections/       Hero · About · Products · Approach · Work · Contact
+│  ├─ sections/       Hero · About · Products · Work · Contact
 │  └─ ui/             Button · Eyebrow · Section · Stat · ImageBox ·
 │                     Reveal · ScrollReveal
 ├─ data/              content.json + typed accessor
@@ -353,11 +353,11 @@ is a seed-and-config change rather than a schema one.
 **Imagery is still partly the cantina's.** The hero video and its poster are
 now the firm's own site footage, but the feature and gallery images remain
 photographs of a Mexican cantina. Files were renamed to neutral names
-(`approach.jpg`, `feature-1.png`) — the pictures themselves cannot be
+(`feature-1.png`, `gallery-1.png`) — the pictures themselves cannot be
 rebranded, so they need replacing.
 
 The two `badge-*.png` files went with the About section's photo slot when it
-became a second stat tile. `logo.svg`, `logo-previous.svg` and `social-1.jpg`
+became a second stat tile. `approach.jpg`, `logo.svg`, `logo-previous.svg` and `social-1.jpg`
 are still present but unreferenced.
 
 The brand mark is `logo.png` — the real AD monogram, white on transparent.

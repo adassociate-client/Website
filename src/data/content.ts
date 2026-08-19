@@ -16,7 +16,6 @@ export const {
   hero,
   about,
   products,
-  approach,
   work,
   contact,
   social,
