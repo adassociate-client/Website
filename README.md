@@ -1,10 +1,10 @@
-# AD Associates — Next.js site
+# Company website — Next.js
 
 A component-split Next.js build with a REST backend. Every section is its own
 file and every string comes from `src/data/content.json`.
 
 > **Provenance.** This started life as a static design kit for a Mérida
-> cantina and was rebranded to AD Associates. The visual system (dark theme,
+> cantina and was rebranded for its current owner. The visual system (dark theme,
 > olive accent `#92843b`, Nunito + Libre Baskerville, 4px grid) is inherited
 > from that kit. **All copy, contact details, prices and service lines are
 > placeholders** — see "What still needs replacing" at the bottom.
@@ -332,21 +332,18 @@ Design decisions worth knowing:
 Nothing below is real. The rebrand changed names and copy; it could not
 invent an actual business.
 
-The contact details are the exception — these are real:
+The contact details are the exception — those are real, and are deliberately
+not reproduced in this document. They live in exactly two places:
 
-| | Value | Set in |
-|---|---|---|
-| Telephone | `+91 95668 60808` | `CONTACT_PHONE_E164` / `_DISPLAY` |
-| Telephone (second line) | `+91 96555 66454` | `CONTACT_PHONE_ALT_E164` / `_DISPLAY` |
-| WhatsApp | both lines | `CONTACT_WHATSAPP_E164`, `CONTACT_WHATSAPP_ALT_E164` |
-| Email | `adassociates6789@gmail.com` | `CONTACT_EMAIL` |
-| Email subject | "Enquiry for AD Associates" | `CONTACT_EMAIL_SUBJECT` |
-| Office | 2/45-C, Mariamman Kovil Street, Vellanaipatti, Serayampalayam, Coimbatore, Tamil Nadu 641048 | `contact.address`, `footer.addressLines` |
-| Instagram | `@ad_associates` | `CONTACT_INSTAGRAM_HANDLE`, `social[]` in content.json |
+- **`.env`** — the phone, WhatsApp, email and social handle that
+  `npm run db:seed` writes into the `ContactChannel` table. See Environment
+  above for how to find the variable names.
+- **`src/data/content.json`** — the address, phone numbers, email, social
+  link and map embed that the page itself renders.
 
-The numbers and the email are shown in the contact section and the footer, and
-returned by `GET /api/contact`. The second line is optional: blank out
-`CONTACT_PHONE_ALT_E164` and the seed drops that channel.
+Change them in those two files and nothing here needs updating. The second
+phone line is optional: blank `CONTACT_PHONE_ALT_E164` and the seed drops
+that channel rather than writing an empty one.
 
 **WhatsApp asks which line to message.** Both numbers are on WhatsApp, so a
 single link would have to guess. The contact section has a *Message on
@@ -366,7 +363,7 @@ second channel. Note the page's copy of these links lives in `content.json`;
 only `GET /api/contact` is seeded from the environment.
 
 **The email link carries a subject.** `contact.emailHref` is
-`mailto:…?subject=Enquiry%20for%20AD%20Associates`, so the visitor's mail app
+`mailto:…?subject=…`, so the visitor's mail app
 opens already addressed and titled — they only write the message. The display
 text and the href are separate fields for this reason; render `contact.email`,
 never `contact.emailHref`. The seed builds the same href for the API's email
@@ -395,8 +392,8 @@ site fails until Settings → Apps → Default apps → *Choose defaults by link
 type* → `MAILTO` is pointed at a mail client that exists.
 
 **The map is addressed by Google place CID, not by coordinates or a search
-string.** `contact.mapEmbed` is
-`https://maps.google.com/maps?cid=18258534699908848486&output=embed`. The CID
+string.** `contact.mapEmbed` holds
+a `https://maps.google.com/maps?cid=…&output=embed` URL. The CID
 identifies the firm's own Google listing, so the pin cannot drift the way a
 re-geocoded address string can, and the info card shows the business name. Two
 things worth knowing if it ever needs changing:
@@ -406,12 +403,12 @@ things worth knowing if it ever needs changing:
   iframe", which makes it look broken when it is not.
 - To retarget it, follow the place's share link to its full URL and read the
   CID out of `data=…!1s0x…:0x…` — the hex after the colon, as decimal:
-  `node -e "console.log(BigInt('0xfd6358925b35db66').toString())"`.
+  `node -e "console.log(BigInt('0x…').toString())"`.
 
 The Instagram link is stored without the `igsh=` parameter that Instagram
 appends to a shared link. That token identifies the share session it came
 from, not the profile, so it does not belong in a link served to every
-visitor — `https://www.instagram.com/ad_associates/` resolves to the same
+visitor — `https://www.instagram.com/<handle>/` resolves to the same
 page without it.
 
 There is deliberately **no LinkedIn** anywhere — no link, no seeded channel,
@@ -449,5 +446,5 @@ placeholder generated for the rename, and `logo-previous.svg`, the original
 cantina wordmark.
 
 Note the monogram carries no company name, where the old wordmark spelled out
-"AD ASSOCIATES · STRATEGY & ADVISORY". The name reaches assistive technology
+the company name and a strapline. The name reaches assistive technology
 and search engines through the `alt` text (`site.name`) instead.
