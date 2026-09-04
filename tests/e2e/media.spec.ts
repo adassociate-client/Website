@@ -81,9 +81,19 @@ test("the page stays within a sane weight budget", async ({ page }) => {
   await page.waitForTimeout(4000);
 
   const totalMb = [...bytes.values()].reduce((a, b) => a + b, 0) / 1024 / 1024;
-  // It was 26MB, which is what made the site unusable on a phone. The video
-  // alone is 2.2MB, so this leaves room without letting it creep back.
-  expect(totalMb, `page weight is ${totalMb.toFixed(2)}MB`).toBeLessThan(5);
+  // It was 26MB, which is what made the site unusable on a phone.
+  //
+  // Raised from 5MB to 6.5MB deliberately, once, and the reason should stay
+  // visible: the hero was encoded at 30fps to save bytes and the judder was
+  // obvious on the aerial footage. Restoring 60fps cost ~1MB. Smoothness on
+  // the one piece of motion the site has was judged worth it at this size —
+  // the failure being guarded against is a slide back toward 26MB, not the
+  // difference between 4.4 and 5.4.
+  //
+  // If a future clip cannot fit, shorten it. Duration is what costs: 70
+  // seconds at 60fps is the whole problem, and a 20-second loop would be
+  // smoother *and* sharper *and* smaller than what is here now.
+  expect(totalMb, `page weight is ${totalMb.toFixed(2)}MB`).toBeLessThan(6.5);
 });
 
 test("no image is served as a PNG photograph", async ({ page }) => {

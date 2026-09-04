@@ -119,8 +119,8 @@ looked blank rather than slow.
 
 | | before | after |
 |---|---|---|
-| phone (390px) | 26.0 MB | **4.4 MB** (0.8 MB where the video is skipped) |
-| tablet / desktop | 26.0 MB | **4.4 MB** |
+| phone (390px) | 26.0 MB | **5.4 MB** (0.7 MB where the video is skipped) |
+| tablet / desktop | 26.0 MB | **5.4 MB** |
 
 **Photographs were PNGs.** Seven of them, ~1.1MB each, at roughly three
 times their displayed size. Re-encoded as JPEG, centre-cropped to the aspect
@@ -134,9 +134,9 @@ browser reserves their space and nothing shifts as they arrive.
 **Hero video.** The source footage is delivered as a 4K master — the current
 one is 3840x2160, 70 seconds, 60fps, 214MB — which is not something to serve
 directly. Each one is re-encoded before it goes in: scaled down, frame rate
-halved to 30, audio dropped (the element is permanently muted), and
+kept at the source's 60, audio dropped (the element is permanently muted), and
 `+faststart` set so playback can begin before the file is complete. The
-current hero is 1280x720 H.264 at 3.66MB.
+current hero is 1280x720 H.264, 60fps, 4.64MB.
 
 Two rules the encode has to respect, both learned the hard way:
 
@@ -145,11 +145,16 @@ Two rules the encode has to respect, both learned the hard way:
   support. It looked perfect in testing on Windows while silently showing
   nothing but the poster to a whole browser. `media.spec.ts` now asserts
   `currentTime` advances, across engines, so this cannot recur quietly.
-- **Keep the page under 5MB.** `media.spec.ts` enforces it. A 70-second clip
-  at the previous quality level came to 10.2MB on its own; 1280x720 at CRF 33
-  brings it to 3.66MB, which the scrim and overlaid text absorb comfortably.
-  If a future clip cannot make the budget at acceptable quality, trim its
-  length rather than degrade it further — duration is what costs here.
+- **Keep the source frame rate.** The first encode of this clip halved 60fps
+  to 30 to save about 1MB, and the judder was immediately obvious on aerial
+  footage — measured at 30.6 effective fps with only 3 dropped frames, so it
+  was the file and not the machine. Resolution is the thing to trade away
+  here, not frames: the hero sits behind a 55% scrim with the headline over
+  it, so 1280x720 upscaled reads fine while 30fps does not.
+- **Keep the page under 6.5MB**, which `media.spec.ts` enforces. Duration is
+  what costs: 70 seconds at 60fps is why this is 4.64MB. A 20-second loop
+  would be smoother, sharper and smaller all at once — shorten a clip before
+  degrading it.
 
 **The video plays everywhere, including phones.** It did not while the file
 was 18MB — that was the whole reason the site could not be browsed on a
