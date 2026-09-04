@@ -1,39 +1,89 @@
+# ==========================================================================
+# What must never reach a public repository.
+# Grouped by why, because "why" is what stops someone deleting a line later.
+# ==========================================================================
+
+# --- Secrets --------------------------------------------------------------
+# Every .env variant, not just the one that exists today. There is no
+# committed template on purpose: the README documents the variables instead,
+# so nothing here carries a real connection string, salt or contact detail.
+.env
+.env.*
+*.env
+
+# Credential material by shape, as a safety net for files nobody anticipated.
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*secret*.json
+*credential*.json
+service-account*.json
+.npmrc
+.netrc
+
+# --- Build output and caches ---------------------------------------------
 node_modules/
 .next/
 out/
 build/
-.env
-.env*.local
 *.tsbuildinfo
+next-env.d.ts
+# Prisma 7 emits its client into the source tree; it is a build artefact and
+# `npm run build` regenerates it.
+src/generated/
 
-# SQLite database files
+# --- Data -----------------------------------------------------------------
+# The SQLite database holds submitted enquiries, including salted IP hashes.
 prisma/*.db
 prisma/*.db-journal
+*.sqlite
+*.sqlite3
+*.dump
+*.bak
 
-# Prisma 7 emits the client into the source tree; it is a build artifact
-src/generated/
-next-env.d.ts
-.DS_Store
-
-# Per-machine Claude Code settings — the shared .claude/settings.json is
-# tracked, this one is personal.
-.claude/settings.local.json
-
-# Video masters dropped in the project root. Only the copy the site actually
-# serves — public/assets/images/hero-video.mp4 — belongs in the repo; keeping
-# the master beside it would commit the same footage twice, and git history is
-# permanent. Store masters wherever the rest of the source media lives.
-# To commit one anyway: git add -f "<filename>"
-/*.mov
-/*.mp4
-# Source artwork dropped in the root. The processed copy the site serves lives
-# under public/assets/images/; the original is not the deliverable.
-/*.png
-/*.jpg
-
-# Playwright output. Traces, screenshots and videos are per-run debugging
-# artefacts, and a failure video of a page that plays video is large.
+# --- Test output ----------------------------------------------------------
+# Traces, screenshots and failure videos are per-run debugging artefacts, and
+# a video of a page that itself plays video is large.
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/coverage/
+
+# --- Source media and internal working files ------------------------------
+# Only the processed copies the site actually serves belong in git, and those
+# live under public/assets/. These are the originals they were cut from:
+# multi-megabyte masters, raw product photography, and internal documents
+# that are not part of the website at all.
+#
+# To commit one deliberately: git add -f "<path>"
+/Images/
+/LOGO/
+/Letterpad/
+/*.mov
+/*.mp4
+/*.png
+/*.jpg
+/*.jpeg
+/*.psd
+/*.ai
+/*.pptx
+/*.docx
+/*.xlsx
+/*.pdf
+/*.zip
+# Internal notes and generation prompts — working material, not deliverables.
+/cinematic_*.md
+
+# --- Local tooling and OS ------------------------------------------------
+# The shared .claude/settings.json is tracked; this one is per-machine.
+.claude/settings.local.json
+.vercel
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
