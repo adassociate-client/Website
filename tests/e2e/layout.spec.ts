@@ -149,3 +149,25 @@ test("anchored sections clear the sticky header", async ({ page }) => {
   }));
   expect(headingTop, "heading landed underneath the sticky nav").toBeGreaterThanOrEqual(navBottom - 1);
 });
+
+test("stacked buttons are the same width", async ({ page }) => {
+  await page.setViewportSize({ width: 405, height: 900 });
+  await page.goto("/");
+  await page.locator("#contact").scrollIntoViewIfNeeded();
+
+  // Below 576px the contact actions stack, and `align-items: stretch` widens
+  // each child. It does not widen the <summary> inside the WhatsApp
+  // <details>, which is an inline-flex button and stayed as wide as its own
+  // label — 218px against Instagram's 373px, with the smaller tap target on
+  // the more important action.
+  const widths = await page.evaluate(() =>
+    [...document.querySelector(".ad-contact__actions")!.children].map((child) => {
+      const control = child.tagName === "DETAILS" ? child.querySelector("summary")! : child;
+      return Math.round(control.getBoundingClientRect().width);
+    }),
+  );
+
+  expect(widths.length).toBeGreaterThan(1);
+  const spread = Math.max(...widths) - Math.min(...widths);
+  expect(spread, `action buttons differ in width: ${widths.join(" vs ")}px`).toBeLessThanOrEqual(1);
+});

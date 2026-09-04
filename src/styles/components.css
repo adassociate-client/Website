@@ -325,6 +325,14 @@
   .ad-image-box:hover .image-box-header img { transform: scale(1.04); }
 }
 
+/* On a phone the cards stack, so three 3:2 images at 247px each turned the
+   Products section into 1.7 screens of scrolling before the fourth card was
+   even reachable. A 16:9 crop on narrow screens keeps the subject and gives
+   back roughly a third of a screen. */
+@media (max-width: 575px) {
+  .ad-image-box .image-box-header img { aspect-ratio: 16 / 9; }
+}
+
 .ad-image-box .image-box-body { padding: var(--ad-space-6); }
 
 .ad-image-box .body-title {
@@ -587,6 +595,14 @@
    to two lines and the row looks broken. One per line instead. */
 @media (max-width: 575px) {
   .ad-contact__actions { flex-direction: column; align-items: stretch; }
+
+  /* `align-items: stretch` widens the <details> wrapper, but the <summary>
+     inside it is an inline-flex .ad-btn and stays as wide as its own label —
+     so the WhatsApp trigger came out 218px against Instagram's 373px, two
+     buttons of different widths in the same column, and the smaller tap
+     target belonged to the more important action. */
+  .ad-whatsapp,
+  .ad-whatsapp__summary { width: 100%; }
 }
 
 /* --- WhatsApp number chooser --------------------------------------------- */
