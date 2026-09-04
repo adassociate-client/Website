@@ -1,9 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
 /** Specs whose result can differ by rendering engine. */
-const CROSS_ENGINE = /(media|content).spec.ts/;
+const CROSS_ENGINE = /(media|content|a11y).spec.ts/;
 /** Those, plus the layout checks that only mean anything on a touch device. */
-const MOBILE = /(media|content|layout).spec.ts/;
+const MOBILE = /(media|content|layout|a11y).spec.ts/;
 
 /**
  * End-to-end configuration.
@@ -70,7 +70,15 @@ export default defineConfig({
     // reports as a build failure rather than as "server never came up".
     command: "npm run start",
     url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    // Never reuse. `test:e2e` builds first, so any server already running
+    // predates that build and will serve HTML referencing chunks that no
+    // longer exist. That failure is vicious: the stale page 404s its own
+    // JavaScript, nothing hydrates, and the suite reports a dozen behavioural
+    // failures — a menu that will not open, sections that never reveal — none
+    // of which are real. Starting a fresh server every time costs a couple of
+    // seconds; a port clash now fails loudly instead of silently testing the
+    // wrong build.
+    reuseExistingServer: false,
     timeout: 180_000,
   },
 });

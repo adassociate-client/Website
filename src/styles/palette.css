@@ -30,6 +30,11 @@
   --ad-form-border:   #d5d5d7;
 
   /* --- Derived (alpha variants of the above, no new hues) --------------- */
+  /* The accent lightened 16% toward white — same hue, no new one. Hover
+     fills use this rather than --ad-accent-87, which composites over the
+     black page to something DARKER than the accent and so lowered text
+     contrast on the very interaction meant to draw attention. */
+  --ad-accent-light:  #a3985a;
   --ad-accent-87:     rgba(146, 132, 59, 0.87); /* extracted hover fill      */
   --ad-overlay:       rgba(0, 0, 0, 0.6);       /* modal backdrop            */
   --ad-scrim:         rgba(0, 0, 0, 0.55);      /* media/video scrim         */

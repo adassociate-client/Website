@@ -54,7 +54,20 @@ export default function HeroMedia({ video, poster }: HeroMediaProps) {
   if (!shouldPlay) return null;
 
   return (
-    <video className="ad-hero__media" autoPlay loop muted playsInline poster={poster}>
+    // aria-hidden because the video is decoration: it carries no information
+    // the headline does not, has no audio track, and no captions could exist
+    // for it. Without this a screen reader announces an unlabelled media
+    // element that the user can neither control nor learn anything from.
+    <video
+      className="ad-hero__media"
+      autoPlay
+      loop
+      muted
+      playsInline
+      poster={poster}
+      aria-hidden="true"
+      tabIndex={-1}
+    >
       <source src={video} type="video/mp4" />
     </video>
   );

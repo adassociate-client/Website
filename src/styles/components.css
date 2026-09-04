@@ -224,12 +224,12 @@
    is how keyboard users see where they are. */
 @media (hover: hover) {
   .ad-btn:hover { transform: translateY(var(--ad-lift)); }
-  .ad-btn--primary:hover { background: var(--ad-accent-87); color: var(--ad-text-primary); }
+  .ad-btn--primary:hover { background: var(--ad-accent-light); color: var(--ad-neutral-900); }
   .ad-btn--ghost:hover,
   .ad-btn--outline:hover {
-    background: var(--ad-accent-87);
-    border-color: var(--ad-accent);
-    color: var(--ad-text-primary);
+    background: var(--ad-accent-light);
+    border-color: var(--ad-accent-light);
+    color: var(--ad-neutral-900);
   }
 }
 
@@ -237,11 +237,13 @@
 
 .ad-btn--primary {
   background: var(--ad-accent);
-  color: var(--ad-text-primary);
+  /* Dark, not white. White on this olive is 3.76:1 — below the 4.5:1 AA
+     floor for 14px text, on the site's primary call to action. */
+  color: var(--ad-neutral-900);
 }
 .ad-btn--primary:focus-visible {
-  background: var(--ad-accent-87);
-  color: var(--ad-text-primary);
+  background: var(--ad-accent-light);
+  color: var(--ad-neutral-900);
 }
 
 .ad-btn--ghost {
@@ -250,9 +252,9 @@
   color: var(--ad-text-primary);
 }
 .ad-btn--ghost:focus-visible {
-  background: var(--ad-accent-87);
-  border-color: var(--ad-accent);
-  color: var(--ad-text-primary);
+  background: var(--ad-accent-light);
+  border-color: var(--ad-accent-light);
+  color: var(--ad-neutral-900);
 }
 
 .ad-btn--outline {
@@ -261,9 +263,9 @@
   color: var(--ad-warning);
 }
 .ad-btn--outline:focus-visible {
-  background: var(--ad-accent-87);
-  border-color: var(--ad-accent);
-  color: var(--ad-text-primary);
+  background: var(--ad-accent-light);
+  border-color: var(--ad-accent-light);
+  color: var(--ad-neutral-900);
 }
 
 .ad-btn[disabled],
@@ -358,7 +360,9 @@
   font-size: var(--ad-caption);
   letter-spacing: var(--ad-tracking-caption);
   text-transform: uppercase;
-  color: var(--ad-text-muted);
+  /* Not --ad-text-muted. The teal reads 6.32:1 on the black page, which is
+     fine, but only 3.81:1 on this card's #333 surface — a fail. */
+  color: var(--ad-neutral-200);
   margin-top: var(--ad-space-2);
 }
 
@@ -376,7 +380,7 @@
   color: var(--ad-text-muted);
 }
 
-.ad-badge--accent  { background: var(--ad-accent); color: var(--ad-text-primary); }
+.ad-badge--accent  { background: var(--ad-accent); color: var(--ad-neutral-900); }
 .ad-badge--warning { background: var(--ad-warning); color: var(--ad-neutral-900); }
 .ad-badge--danger  { background: var(--ad-danger);  color: var(--ad-text-primary); }
 
@@ -658,7 +662,7 @@
 }
 
 @media (hover: hover) {
-  .ad-whatsapp__option:hover { background: var(--ad-accent-87); color: var(--ad-text-primary); }
+  .ad-whatsapp__option:hover { background: var(--ad-accent-light); color: var(--ad-neutral-900); }
 }
 
 /* A phone number split across a line break cannot be read back. It is short

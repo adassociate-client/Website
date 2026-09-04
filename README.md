@@ -81,6 +81,7 @@ regression fails loudly instead of being noticed months later:
 | `security.spec.ts` | Every security header present; the page loading with zero CSP violations; the 64KB body cap; the offset cap; slug and search rejection; no stack traces in errors; the closed enquiry inbox; read endpoints actually rate limited |
 | `media.spec.ts` | The hero video *playing*, not merely present; `muted`+`playsInline` for mobile autoplay; lazy loading and intrinsic dimensions; a page-weight budget; no photograph shipped as PNG |
 | `content.spec.ts` | `tel:` in E.164, well-formed `mailto:` and `wa.me` links, `rel=noopener` on every new-tab link, the WhatsApp chooser, title/description/favicon, `robots.txt` |
+| `a11y.spec.ts` | An axe scan against WCAG 2.1 AA on the page and on the open mobile menu, plus contrast asserted directly for the button's hover fill, which axe never sees |
 
 Three details in the configuration are deliberate.
 
@@ -100,6 +101,20 @@ server; at the default count they starve each other and tests that take two
 seconds alone time out at thirty. If you see wholesale timeouts rather than
 assertion failures, that is the cause — lower `workers`, do not raise
 `timeout`.
+
+**The server is never reused.** `test:e2e` builds first, so a server already
+running predates that build and serves HTML referencing chunks that no longer
+exist. That failure is vicious rather than obvious: the stale page 404s its
+own JavaScript, nothing hydrates, and the suite reports a dozen behavioural
+failures — a menu that will not open, sections that never reveal — none of
+which are real. It cost an afternoon before `reuseExistingServer: false` made
+it impossible.
+
+**The audit refuses to run on an unstyled page.** An unstyled page is
+black-on-white and passes every contrast rule, so a broken stylesheet reports
+as a perfect accessibility score. `a11y.spec.ts` asserts the design tokens are
+actually applied before it scans — because that exact false pass happened
+here, from the same stale-server cause.
 
 **It found a bug on its first run.** The CSP carried
 `upgrade-insecure-requests`, which rewrites http:// requests to https://.
@@ -175,6 +190,35 @@ without both, mobile Safari refuses to start and leaves a paused frame.
 Verified across watches (240px), phones, foldables, tablets, laptops,
 projectors (XGA 1024x768 through 4K) and ultrawide: no overflow, no
 under-sized tap targets, and every section reachable and revealed.
+
+## Accessibility
+
+An axe scan across WCAG 2.1 AA runs in `a11y.spec.ts`, on the page and on the
+open mobile menu. It currently reports **0 violations against 43 passing
+rules**, but it did not start there — it found two contrast failures that had
+shipped and that nothing else would have caught:
+
+- **White on the olive accent: 3.76:1**, against the 4.5:1 AA floor for 14px
+  text — on the site's primary call to action, in the nav, the hero and the
+  About section. Text on accent fills is now `--ad-neutral-900`, at 4.71:1.
+- **The teal caption on the card surface: 3.81:1.** The same teal is 6.32:1 on
+  the black page and fine everywhere else, so this was only wrong in one
+  place. Stat labels now use `--ad-neutral-200`, at 7.87:1.
+
+Fixing the first exposed a second problem axe cannot see, because it only
+tests the resting state: **no single text colour passed on both the button's
+fills.** The hover fill was `--ad-accent-87` composited over the black page,
+which lands *darker* than the accent — so hovering lowered contrast on the
+very interaction meant to invite it. White passed hover and failed rest; dark
+passed rest and failed hover. Hover now uses `--ad-accent-light`, the accent
+lightened 16% toward white, so dark text reads 4.71:1 at rest and 6.06:1 on
+hover — the interaction raises contrast, as it should. Both states are
+asserted numerically in the test, not left to axe.
+
+The hero video is `aria-hidden` with `tabIndex={-1}`. It is decoration: it
+carries nothing the headline does not, has no audio track, and no caption
+could exist for it. Without that, a screen reader announces an unlabelled
+media element the user can neither control nor learn anything from.
 
 ## Hardening
 
