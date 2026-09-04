@@ -224,6 +224,28 @@ cap it sweeps, and sheds load if that frees nothing.
   change when you do.
 
 ## Deploying
+Before trusting a deploy, reproduce what the host actually does — a clean
+clone with no `.env`, built and served:
+
+```powershell
+git clone --depth 1 <repo> ../deploy-check
+cd ../deploy-check; npm ci; npm run build; npx next start -p 3200
+```
+
+This is worth doing rather than assuming, because it has caught two real
+failures that a local run with a populated `.env` could not:
+
+- `prisma.config.ts` used strict `env("DATABASE_URL")` and `db.ts` built the
+  Prisma client at module load, so the build itself demanded a database and
+  died with "Failed to collect page data".
+- Rate limiting was added to every read route keyed on `hashIp`, which throws
+  in production when `IP_HASH_SALT` is unset. Every API route then returned
+  500 on a bare deploy — including `/api/health`, which is supposed to report
+  degradation rather than become it. Rate limiting now uses `rateLimitKey`,
+  which salts when it can but does not require one, because that key is held
+  in memory for one window and never written down. `hashIp` keeps its guard
+  where it belongs: the value stored on an enquiry.
+
 
 The build runs without a `.env` and without a database, so a clean checkout
 deploys as-is on Vercel: import the repo, take the detected Next.js defaults,

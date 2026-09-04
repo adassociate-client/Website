@@ -1,5 +1,5 @@
 import { ApiError } from "./http";
-import { clientIp, hashIp } from "./client";
+import { clientIp, rateLimitKey } from "./client";
 import { MAX_RATE_LIMIT_KEYS } from "./constants";
 
 /**
@@ -114,5 +114,5 @@ export function limitRequest(
   limit: number,
   windowMs: number,
 ): RateLimitResult {
-  return consume(`${scope}:${hashIp(clientIp(request))}`, limit, windowMs);
+  return consume(`${scope}:${rateLimitKey(clientIp(request))}`, limit, windowMs);
 }

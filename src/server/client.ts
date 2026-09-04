@@ -38,3 +38,23 @@ export function hashIp(ip: string): string {
 
   return createHash("sha256").update(`${salt}:${ip}`).digest("hex");
 }
+
+/**
+ * Bucket key for rate limiting.
+ *
+ * Salted like `hashIp` when a salt is available, but it does not demand one.
+ * The production guard on `hashIp` exists because a hash that gets *written
+ * down* is reversible by rainbow table without a salt. A rate-limit key lives
+ * in process memory for the length of one window, is never persisted and is
+ * never returned by any endpoint, so that risk does not apply to it.
+ *
+ * Splitting the two matters: rate limiting was added to every read route,
+ * which made all of them — `/api/health` included — throw in production
+ * whenever IP_HASH_SALT was unset. A liveness probe is meant to report
+ * degradation, not become it, and on a fresh deploy with no environment set
+ * that is exactly when you need it to answer.
+ */
+export function rateLimitKey(ip: string): string {
+  const salt = process.env.IP_HASH_SALT ?? "";
+  return createHash("sha256").update(`rl:${salt}:${ip}`).digest("hex");
+}
