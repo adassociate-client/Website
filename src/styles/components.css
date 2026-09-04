@@ -681,6 +681,33 @@
   .ad-whatsapp__option:hover { background: var(--ad-accent-light); color: var(--ad-neutral-900); }
 }
 
+/* On a phone the contact details are the page's primary actions, and as plain
+   inline links they were 20px tall with 4px between the two numbers and 2px
+   between the address and its Gmail fallback — three targets a thumb cannot
+   separate. WCAG 2.5.8 exempts links inside a sentence, so nothing flagged
+   it, but the exemption is about prose, not about the way somebody actually
+   contacts a business from a phone.
+
+   Each becomes its own full-height row, so there is one target per line with
+   real space around it.
+
+   Keyed on `pointer: coarse`, not on width. The first attempt used
+   max-width: 575px, which left the same 20px targets on a phone held
+   sideways — 750px wide and every bit as much a thumb. Touch is a property
+   of the input device, not of the viewport. */
+@media (pointer: coarse) {
+  .ad-contact__phone,
+  .ad-contact__email,
+  .ad-contact__alt {
+    display: flex;
+    align-items: center;
+    min-height: var(--ad-touch-target);
+  }
+
+  /* The comma between the numbers is punctuation for a sentence that is no
+     longer laid out as one. */
+  .ad-contact__phone-separator { display: none; }
+}
 /* A phone number split across a line break cannot be read back. It is short
    enough that keeping it whole never overflows. */
 .ad-contact__phone { white-space: nowrap; }

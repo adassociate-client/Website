@@ -26,7 +26,7 @@ export default function Contact({ contact, social }: ContactProps) {
             <strong>{contact.phoneLabel}:</strong>{" "}
             {contact.phones.map((phone, i) => (
               <Fragment key={phone.href}>
-                {i > 0 && ", "}
+                {i > 0 && <span className="ad-contact__phone-separator">, </span>}
                 {/* nowrap so a number never breaks across two lines — half a
                     phone number at the end of a line is unreadable. The pair
                     still wraps as whole numbers on a narrow screen. */}
@@ -40,7 +40,7 @@ export default function Contact({ contact, social }: ContactProps) {
             <strong>{contact.emailLabel}:</strong>{" "}
             {/* An address is one long unbreakable token; on a narrow screen it
                 would push the section sideways without this. */}
-            <a className="ad-wrap-anywhere" href={contact.emailHref}>
+            <a className="ad-contact__email ad-wrap-anywhere" href={contact.emailHref}>
               {contact.email}
             </a>{" "}
             {/* A mailto: does nothing at all when the machine has no mail app
