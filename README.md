@@ -119,8 +119,8 @@ looked blank rather than slow.
 
 | | before | after |
 |---|---|---|
-| phone (390px) | 26.0 MB | **2.95 MB** (0.76 MB where the video is skipped) |
-| tablet / desktop | 26.0 MB | **2.95 MB** |
+| phone (390px) | 26.0 MB | **4.4 MB** (0.8 MB where the video is skipped) |
+| tablet / desktop | 26.0 MB | **4.4 MB** |
 
 **Photographs were PNGs.** Seven of them, ~1.1MB each, at roughly three
 times their displayed size. Re-encoded as JPEG, centre-cropped to the aspect
@@ -131,14 +131,25 @@ page, competing with content the visitor could actually see. Below-the-fold
 images are now `loading="lazy"` with intrinsic `width`/`height` so the
 browser reserves their space and nothing shifts as they arrive.
 
-**The hero video was 18MB of 4K, and in HEVC.** Two separate problems:
+**Hero video.** The source footage is delivered as a 4K master — the current
+one is 3840x2160, 70 seconds, 60fps, 214MB — which is not something to serve
+directly. Each one is re-encoded before it goes in: scaled down, frame rate
+halved to 30, audio dropped (the element is permanently muted), and
+`+faststart` set so playback can begin before the file is complete. The
+current hero is 1280x720 H.264 at 3.66MB.
 
-- HEVC in MP4 does not play in Firefox, and only plays in Chrome where the
-  platform has hardware support. Some visitors were seeing the poster still
-  and no video at all, silently. It is now H.264 High, which plays anywhere.
-- 4K to render at most 1920px wide, with an audio track on a permanently
-  muted element. Re-encoded to 1920x636, audio dropped, `+faststart` so
-  playback can begin before the file is complete: 18.03 MB to 2.19 MB.
+Two rules the encode has to respect, both learned the hard way:
+
+- **H.264, never HEVC.** An earlier master was HEVC/H.265, which Firefox
+  cannot play in MP4 at all and Chrome only plays with platform hardware
+  support. It looked perfect in testing on Windows while silently showing
+  nothing but the poster to a whole browser. `media.spec.ts` now asserts
+  `currentTime` advances, across engines, so this cannot recur quietly.
+- **Keep the page under 5MB.** `media.spec.ts` enforces it. A 70-second clip
+  at the previous quality level came to 10.2MB on its own; 1280x720 at CRF 33
+  brings it to 3.66MB, which the scrim and overlaid text absorb comfortably.
+  If a future clip cannot make the budget at acceptable quality, trim its
+  length rather than degrade it further — duration is what costs here.
 
 **The video plays everywhere, including phones.** It did not while the file
 was 18MB — that was the whole reason the site could not be browsed on a
