@@ -30,3 +30,10 @@ next-env.d.ts
 # under public/assets/images/; the original is not the deliverable.
 /*.png
 /*.jpg
+
+# Playwright output. Traces, screenshots and videos are per-run debugging
+# artefacts, and a failure video of a page that plays video is large.
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

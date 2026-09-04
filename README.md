@@ -62,6 +62,55 @@ running process has already loaded the stale binary.
 surfaces as `Cannot find module './331.js'` on every route. Stop the dev
 server first; if it has already happened, delete `.next/` and restart.
 
+## Tests
+
+```powershell
+npm run test:e2e          # build, then run every project
+npm run test:e2e -- --project=chromium   # one engine, much faster
+npm run test:e2e:ui       # pick and step through tests interactively
+npm run test:e2e:report   # open the HTML report from the last run
+```
+
+Playwright, in `tests/e2e`. The suite is not generic scaffolding — every
+assertion in it corresponds to a defect this site actually had, so a
+regression fails loudly instead of being noticed months later:
+
+| Spec | What it holds in place |
+|---|---|
+| `layout.spec.ts` | No sideways scroll from 240px to 2560px; tap targets at/above 24px; the nav reachable below 768px, closing on Escape and returning focus; no nav link pointing at a section that does not exist; anchors landing clear of the sticky header |
+| `security.spec.ts` | Every security header present; the page loading with zero CSP violations; the 64KB body cap; the offset cap; slug and search rejection; no stack traces in errors; the closed enquiry inbox; read endpoints actually rate limited |
+| `media.spec.ts` | The hero video *playing*, not merely present; `muted`+`playsInline` for mobile autoplay; lazy loading and intrinsic dimensions; a page-weight budget; no photograph shipped as PNG |
+| `content.spec.ts` | `tel:` in E.164, well-formed `mailto:` and `wa.me` links, `rel=noopener` on every new-tab link, the WhatsApp chooser, title/description/favicon, `robots.txt` |
+
+Three details in the configuration are deliberate.
+
+**It tests the production build, not `next dev`.** The headers differ between
+the two — HSTS is production-only and the CSP drops `'unsafe-eval'` — so a
+dev-server run would pass a policy that never ships.
+
+**Firefox and WebKit are in the matrix**, because a Chromium-only suite is
+blind to exactly the bug this project already had: the hero video shipped as
+HEVC, which Chromium plays on Windows and Firefox cannot play at all. The
+media spec asserts `currentTime` advances rather than that a `<video>`
+exists, which is the difference between catching that and missing it.
+
+**Workers are capped below the CPU count.** Each one drives a browser
+fetching and decoding the 2.2MB hero video against a single-process Next
+server; at the default count they starve each other and tests that take two
+seconds alone time out at thirty. If you see wholesale timeouts rather than
+assertion failures, that is the cause — lower `workers`, do not raise
+`timeout`.
+
+**It found a bug on its first run.** The CSP carried
+`upgrade-insecure-requests`, which rewrites http:// requests to https://.
+Chromium and Firefox exempt localhost; WebKit does not — so previewing the
+production build in Safari upgraded every same-origin request to a port with
+no TLS behind it, and the stylesheet, every script and every image failed
+with an SSL error. The page rendered unstyled with no JavaScript. The
+directive had nothing to do anyway, since every asset is a same-origin
+relative URL and there is no mixed content to upgrade, so it is gone; HSTS is
+what enforces https in production.
+
 ## Weight
 
 The site was shipping **26MB to a phone**, which is why it read as broken on

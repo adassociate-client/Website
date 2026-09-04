@@ -39,7 +39,14 @@ const csp = [
   "form-action 'self'",
   // Clickjacking: this page may not be framed by anyone.
   "frame-ancestors 'none'",
-  ...(isProd ? ["upgrade-insecure-requests"] : []),
+  // Deliberately no `upgrade-insecure-requests`. Every asset here is a
+  // same-origin relative URL, so there is no mixed content for it to
+  // upgrade — and Safari applies it to http://localhost too, where nothing
+  // is listening on TLS. That turned `npm run start` previewed in Safari
+  // into a blank, unstyled page: the stylesheet, every script and every
+  // image failed with an SSL error. Chromium and Firefox exempt localhost;
+  // WebKit does not. HSTS below is what actually enforces https in
+  // production, and it does not have this failure mode.
 ].join("; ");
 
 const securityHeaders = [
